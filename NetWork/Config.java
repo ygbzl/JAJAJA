@@ -159,6 +159,34 @@ public class Config {
         }
     }
 
+
+    public int getNumberOfPreferedNeighbors(){
+        return NumberOfPreferedNeighbors;
+    }
+
+    public int getUnchokinInterval(){
+        return UnchokinInterval;
+    }
+
+    public int getOptUnchockingInterval(){
+        return OptUnchockingInterval;
+    }
+
+    public String getFileName(){
+        return FileName;
+    }
+
+    public int getFileSize(){
+        return FileSize;
+    }
+
+    public int getPieceSize(){
+        return PieceSize;
+    }
+
+    public HashMap<Integer,Peer> getPeers(){
+        return peers;
+    }
 }
 
 /*
