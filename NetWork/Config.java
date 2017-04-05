@@ -92,7 +92,6 @@ public class Config {
                 peers.put(ptemp.PID, ptemp);
                 temp = br.readLine();
             } else {
-
             }
         }
     }
