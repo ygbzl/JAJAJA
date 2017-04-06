@@ -46,6 +46,18 @@ public class ActualMsg {
          msgPaylod = bitField.getData();
     }
 
+    ActualMsg(MsgType msgType) {
+         //for no payload message
+    }
+
+    ActualMsg(MsgType msgType, int index){
+         //for have message and request message
+    }
+
+    ActualMsg(FilePiece piece){
+        //for piece message
+    }
+
     byte[] msgLength;
     byte[] msgPaylod;
     byte msgType;
