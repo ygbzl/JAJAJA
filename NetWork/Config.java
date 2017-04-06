@@ -114,7 +114,7 @@ public class Config {
                 myAddr = str[1];
                 myPort = Integer.parseInt(str[2]);
                 myFile = Integer.parseInt(str[3]) == 0 ? false:true;
-                myBitField = new BitField(myFile, pieceNum);
+                myBitField = new BitField(myFile, pieceNum, 1);
             }
         }
     }
