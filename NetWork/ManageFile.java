@@ -22,14 +22,13 @@ public class ManageFile {
      * Establish the subdirectory according to the self peer ID
      *
      * @param config
-     * @param myID
      * @throws FileNotFoundException
      */
 
-    public ManageFile(Config config, int myID) throws FileNotFoundException{
+    public ManageFile(Config config) throws FileNotFoundException{
         this.config = config;
 
-        String directory = "peer_" + myID + "/";
+        String directory = "peer_" + config.getMyPid() + "/";
 
         File dir = new File(directory);
 
@@ -66,7 +65,7 @@ public class ManageFile {
         return filePiece;
     }
 
-    
+
 
     public synchronized void writeMsg(FilePiece filePiece) throws IOException {
         int offset = filePiece.getPieceIndex()*config.getPieceSize();

@@ -2,6 +2,7 @@ package NetWork;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,7 +15,8 @@ public class Config {
     String FileName;
     int FileSize;
     int PieceSize;
-    HashMap<Integer, Peer> peers;
+    //HashMap<Integer, Peer> peers;
+    ArrayList<Peer> peers;
     int pieceNum;
     int remainPieceSize;
 
@@ -23,6 +25,7 @@ public class Config {
     int myPort;
     Boolean myFile;
     BitField myBitField;
+    int myIndex;
 
     Config(int pid) throws IOException {
         myPid = pid;
@@ -94,11 +97,10 @@ public class Config {
                 new InputStreamReader(new FileInputStream(file));
         BufferedReader br = new BufferedReader(reader);
         String temp = br.readLine();
-        //int i=0;
+        int myIndex = 0;
         while (!temp.isEmpty()) {
             String[] str = temp.split(" ");
             int pidTemp = 0;
-
             try {
                 pidTemp = Integer.parseInt(str[0]);
             } catch (NumberFormatException e) {
@@ -108,14 +110,16 @@ public class Config {
 
             if (pid != pidTemp) {
                 Peer ptemp = new Peer(str);
-                peers.put(ptemp.PID, ptemp);
+                peers.add(ptemp);
                 temp = br.readLine();
             } else {
                 myAddr = str[1];
                 myPort = Integer.parseInt(str[2]);
-                myFile = Integer.parseInt(str[3]) == 0 ? false:true;
+                myFile = Integer.parseInt(str[3]) != 0;
                 myBitField = new BitField(myFile, pieceNum, 1);
+                this.myIndex = myIndex;
             }
+            myIndex++;
         }
     }
 
@@ -143,7 +147,7 @@ public class Config {
         return PieceSize;
     }
 
-    public HashMap<Integer, Peer> getPeers() {
+    public ArrayList<Peer> getPeers() {
         return peers;
     }
 
@@ -165,6 +169,18 @@ public class Config {
 
     public int getMyPort() {
         return myPort;
+    }
+
+    public Boolean getMyFile() {
+        return myFile;
+    }
+
+    public BitField getMyBitField() {
+        return myBitField;
+    }
+
+    public int getMyIndex() {
+        return myIndex;
     }
 
     class Peer {

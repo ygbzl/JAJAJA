@@ -29,19 +29,19 @@ public class HandShakeMsg {
      * @return
      * @throws IOException
      */
-    static HandShakeMsg readMsg(InputStream io) throws IOException {
+    public int readMsg(InputStream io) throws IOException {
         byte[] header = new byte[18];
         byte[] zeroBit = new byte[10];
         byte[] peerID = new byte[4];
-        in.read(header);
-        in.read(zeroBit);
-        in.read(peerID);
+        io.read(header);
+        io.read(zeroBit);
+        io.read(peerID);
 
         if (!header.equals(HEADER) || !zeroBit.equals(ZEROBIT)) {
             throw new IOException("not a handshake message");
         }
 
-        return new HandShakeMsg(ConstantMethod.bytesToInt(peerID));
+        return ConstantMethod.bytesToInt(peerID);
 
     } //read handshake
 

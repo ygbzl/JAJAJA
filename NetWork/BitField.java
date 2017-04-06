@@ -51,13 +51,19 @@ public class BitField {
         }
     }
 
-    boolean compareBitField(BitField guestBitfield) {
+    public boolean compareBitField(BitField guestBitfield) {
         //return whether is interested.
         //also update the interest List.
+        for (int i : interestList
+             ) {
+            if (guestBitfield.getBdata()[i]){
+                return true;
+            }
+        }
         return false;
     }
 
-    boolean isInterested(int index){
+    public boolean isInterested(int index){
         //check if interested in the index piece
         //
         return interestList.contains(index);
@@ -68,15 +74,26 @@ public class BitField {
 
     }*/
 
-    void removeInterest(int index){
+    public synchronized void removeInterest(int index){
         interestList.remove(interestList.indexOf(index));
 
     }
 
-    int randomSelectIndex(Random r){
+    public int randomSelectIndex(Random r){
 
         return r.nextInt(interestList.size());
 
     }
 
+    public byte[] getData() {
+        return data;
+    }
+
+    public Boolean[] getBdata() {
+        return bdata;
+    }
+
+    public int getLength(){
+        return data.length;
+    }
 }

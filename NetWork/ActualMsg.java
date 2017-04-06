@@ -1,27 +1,36 @@
 package NetWork;
 
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
  * Created by zhupd on 2/18/2017.
  */
 public class ActualMsg {
 
-     enum msgType {
-        CHOKE((byte)0),
-        UNCHOKE((byte)1),
-        INTERESTED((byte)2),
-        NOTINTERESTED((byte)3),
-        HAVE((byte)4),
-        BITFIELD((byte)5),
-        REQUEST((byte)6),
-        PIECE((byte)7);
+     enum MsgType {
+        CHOKE(0),
+        UNCHOKE(1),
+        INTERESTED(2),
+        NOTINTERESTED(3),
+        HAVE(4),
+        BITFIELD(5),
+        REQUEST(6),
+        PIECE(7);
 
 
-        byte val=(byte)-1;
+        final int val;
 
-         msgType(byte val) {
-            this.val=val;
-        }
-    }
+         MsgType(int val) {
+
+             this.val = val;
+         }
+
+         byte getMsgType (){
+             return (byte)val;
+         }
+     }
 
     ActualMsg(byte[] msgLength, byte msgType, byte[] msgPaylod) {
         this.msgLength=msgLength;
@@ -31,20 +40,28 @@ public class ActualMsg {
 
     }
 
+    ActualMsg(BitField bitField) {
+         this.msgLength = ConstantMethod.intToBytes(bitField.getLength());
+         type = MsgType.BITFIELD;
+         msgType = type.getMsgType();
+         msgPaylod = bitField.getData();
+    }
+
     byte[] msgLength;
     byte[] msgPaylod;
     byte msgType;
-    msgType type;
+    MsgType type;
 
     /**
      * send actual msg
      */
-    void sendActualMsg() {
+    void sendActualMsg(OutputStream out) {
 
         //todo
     }
 
-    void readActualMsg() {
+    void readActualMsg(InputStream in) {
+
         //todo
     }
 
@@ -56,7 +73,7 @@ public class ActualMsg {
         return ConstantMethod.bytesToInt(index);
     }
 
-    msgType getType() {
+    MsgType getType() {
         //todo
         return type;
     }

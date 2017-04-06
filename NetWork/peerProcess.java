@@ -1,4 +1,5 @@
 package NetWork;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -26,6 +27,12 @@ public class peerProcess  {
     byte[] haveMsg = {0,0,0,5,4};
     byte[] requstMsg = {0,0,0,5,6};
 
+    peerProcess(int pid) throws IOException {
+        myID = pid;
+        config = new Config(myID);
+        fileManager = new ManageFile(config);
+        handshake = new HandShakeMsg(myID);
+    }
 
     /**
      * inputstream, read by fixed byte, first read message length,
@@ -33,19 +40,24 @@ public class peerProcess  {
      * then payload(defined by length)
      *
      */
-    void run() throws IOException{
-        config = new Config();
-        PeerInfo peer = config.peerInfo.get(guestID);
-        //
-        fileManager = new ManageFile(config, myID);
+    void run() throws Exception {
+        //PeerInfo peer = config.peerInfo.get(guestID);
+        //Send handshake message to the peers whose pid less than me
+        for (int i = 0; i < config.getMyIndex(); i++) {
+            sendHandShake(config.getPeers().get(i));
+        }
+        //Waiting for the handshake message from the peers whose pid greater than me
+        for (int i = config.getMyIndex(); i < config.getPeers().size(); i++) {
+            waitHandshake(config.getPeers().get(i));
+        }
         //read input stream
-        Socket socket = new Socket(peer.IP, peer.port);
+        //Socket socket = new Socket(peer.IP, peer.port);
 
-        InputStream in = new BufferedInputStream(socket.getInputStream());
-        OutputStream out = new BufferedOutputStream(socket.getOutputStream());
+        //InputStream in = new BufferedInputStream(socket.getInputStream());
+        //OutputStream out = new BufferedOutputStream(socket.getOutputStream());
 
-        handshake = new HandShakeMsg(myID);
-        handshake.sendMsg(out);
+        //handshake = new HandShakeMsg(myID);
+        //handshake.sendMsg(out);
 
         //send bitfield message
         //TODO
@@ -53,12 +65,27 @@ public class peerProcess  {
         while (true) {
             byte[] msgLength = new byte[4];
             byte[] msgType=new byte[1];
-            in.read(msgLength);
-            in.read(msgType);
+            //in.read(msgLength);
+            //in.read(msgType);
 
             //if()
         }
 
+
+    }
+
+    private void sendHandShake(Config.Peer peer) throws Exception {
+        handshake.sendMsg(peer.getSocket().getOutputStream());
+        if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()){
+            throw new Exception("Error occurs on hand shaking");
+        }
+        ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
+        bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
+        //no need to process recieved bitfield message
+
+    }
+
+    private void waitHandshake(Config.Peer peer) {
 
     }
 
@@ -70,14 +97,14 @@ public class peerProcess  {
      * @throws IOException
      */
     void receive(ActualMsg msg, OutputStream out) throws IOException {
-        msgType type=msg.getType();
+        MsgType type=msg.getType();
         switch (type) {
             case HAVE: {
                 if(peerState.stateMap.get(guestID).isInterested(msg.getIndex())) {
                     //if I don't have this piece
                     //add the index of this piece into the interest list
                     //send interested message
-                    peerState.stateMap.get(guestID).addInterest(msg.getIndex());
+                    //peerState.stateMap.get(guestID).addInterest(msg.getIndex());
                     out.write(interestedMsg);
                 }
                 peerState.stateMap.get(guestID).updateBitField(msg);
@@ -135,14 +162,14 @@ public class peerProcess  {
                 //fetch the index from message
                 //send the piece the peer want
                 int index = msg.getIndex();
-                out.write(writePieceMsg(intToBytes(index)));
+                //out.write(writePieceMsg(intToBytes(index)));
             }
 
             break;
 
             case PIECE: {
                 //read message
-                readPieceMsg(msg);
+                //readPieceMsg(msg);
                 //update my bitfield
                 peerState.stateMap.get(myID).updateBitField(msg);
                 //send HAVE message to ALL peers
