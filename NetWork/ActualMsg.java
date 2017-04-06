@@ -9,7 +9,7 @@ import java.io.OutputStream;
  */
 public class ActualMsg {
 
-     enum MsgType {
+    enum MsgType {
         CHOKE(0),
         UNCHOKE(1),
         INTERESTED(2),
@@ -22,39 +22,43 @@ public class ActualMsg {
 
         final int val;
 
-         MsgType(int val) {
+        MsgType(int val) {
 
-             this.val = val;
-         }
+            this.val = val;
+        }
 
-         byte getMsgType (){
-             return (byte)val;
-         }
-     }
+        byte getMsgType() {
+            return (byte) val;
+        }
+    }
+
+    ActualMsg(){
+
+    }
 
     ActualMsg(byte[] msgLength, byte msgType, byte[] msgPaylod) {
-        this.msgLength=msgLength;
-        this.msgType=msgType;
+        this.msgLength = msgLength;
+        this.msgType = msgType;
         this.msgPaylod = msgPaylod;
         //split msg[]
     }
 
     ActualMsg(BitField bitField) {
-         this.msgLength = ConstantMethod.intToBytes(bitField.getLength());
-         type = MsgType.BITFIELD;
-         msgType = type.getMsgType();
-         msgPaylod = bitField.getData();
+        this.msgLength = ConstantMethod.intToBytes(bitField.getLength());
+        type = MsgType.BITFIELD;
+        msgType = type.getMsgType();
+        msgPaylod = bitField.getData();
     }
 
     ActualMsg(MsgType msgType) {
-         //for no payload message
+        //for no payload message
     }
 
-    ActualMsg(MsgType msgType, int index){
-         //for have message and request message
+    ActualMsg(MsgType msgType, int index) {
+        //for have message and request message
     }
 
-    ActualMsg(FilePiece piece){
+    ActualMsg(FilePiece piece) {
         //for piece message
     }
 
@@ -78,7 +82,7 @@ public class ActualMsg {
 
     int getIndex() {
         byte index[] = new byte[4];
-        for(int i=0;i<4;i++) {
+        for (int i = 0; i < 4; i++) {
             index[i] = msgPaylod[i];
         }
         return ConstantMethod.bytesToInt(index);
