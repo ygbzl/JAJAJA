@@ -15,6 +15,19 @@ public class BitField {
         data=payload;
     }
 
+    BitField(Boolean haveFile, int pieceNum) {
+        data = new byte[pieceNum];
+        if (haveFile) {
+            for (int i = 0; i < data.length; i++) {
+                data[i] = 1;
+            }
+        } else {
+            for (int i = 0; i < data.length; i++) {
+                data[i] = 0;
+            }
+        }
+    }
+
     boolean compareBitField(BitField guestBitfield) {
         //return whether is interested.
         //also update the interest List.

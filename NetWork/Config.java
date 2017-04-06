@@ -15,10 +15,19 @@ public class Config {
     int FileSize;
     int PieceSize;
     HashMap<Integer, Peer> peers;
+    int pieceNum;
+    int remainPieceSize;
+
+    int myPid;
+    String myAddr;
+    int myPort;
+    Boolean myFile;
+    BitField myBitField;
 
     Config(int pid) throws IOException {
+        myPid = pid;
         readCommon();
-        readPeerInfo(pid);
+        readPeerInfo(myPid);
     }
 
     /**
@@ -62,6 +71,14 @@ public class Config {
 
         PieceSize =
                 Integer.parseInt(br.readLine().split(" ")[1]);
+        pieceNum = FileSize/PieceSize;
+
+        if (FileSize%PieceSize != 0) {
+            remainPieceSize = FileSize%PieceSize;
+            pieceNum++;
+        } else {
+            remainPieceSize = PieceSize;
+        }
 
     }
 
@@ -81,19 +98,73 @@ public class Config {
         while (!temp.isEmpty()) {
             String[] str = temp.split(" ");
             int pidTemp = 0;
+
             try {
                 pidTemp = Integer.parseInt(str[0]);
             } catch (NumberFormatException e) {
                 System.out.print("invalid pid. " + str[0]);
                 e.printStackTrace();
             }
+
             if (pid != pidTemp) {
                 Peer ptemp = new Peer(str);
                 peers.put(ptemp.PID, ptemp);
                 temp = br.readLine();
             } else {
+                myAddr = str[1];
+                myPort = Integer.parseInt(str[2]);
+                myFile = Integer.parseInt(str[3]) == 0 ? false:true;
+                myBitField = new BitField(myFile, pieceNum);
             }
         }
+    }
+
+    public int getNumberOfPreferedNeighbors() {
+        return NumberOfPreferedNeighbors;
+    }
+
+    public int getUnchokinInterval() {
+        return UnchokinInterval;
+    }
+
+    public int getOptUnchockingInterval() {
+        return OptUnchockingInterval;
+    }
+
+    public String getFileName() {
+        return FileName;
+    }
+
+    public int getFileSize() {
+        return FileSize;
+    }
+
+    public int getPieceSize() {
+        return PieceSize;
+    }
+
+    public HashMap<Integer, Peer> getPeers() {
+        return peers;
+    }
+
+    public int getPieceNum() {
+        return pieceNum;
+    }
+
+    public int getRemainPieceSize() {
+        return remainPieceSize;
+    }
+
+    public int getMyPid() {
+        return myPid;
+    }
+
+    public String getMyAddr() {
+        return myAddr;
+    }
+
+    public int getMyPort() {
+        return myPort;
     }
 
     class Peer {
@@ -153,8 +224,80 @@ public class Config {
                         e.printStackTrace();
                     }
                 }
-                bitField = new BitField(new byte[0]);
+                bitField = new BitField(this.haveFile, pieceNum);
             }
+        }
+
+        public int getPID() {
+            return PID;
+        }
+
+        public void setPID(int PID) {
+            this.PID = PID;
+        }
+
+        public BitField getBitField() {
+            return bitField;
+        }
+
+        public void setBitField(BitField bitField) {
+            this.bitField = bitField;
+        }
+
+        public Boolean getChockMe() {
+            return chockMe;
+        }
+
+        public void setChockMe(Boolean chockMe) {
+            this.chockMe = chockMe;
+        }
+
+        public Boolean getChocked() {
+            return chocked;
+        }
+
+        public void setChocked(Boolean chocked) {
+            this.chocked = chocked;
+        }
+
+        public Boolean getInterestMe() {
+            return interestMe;
+        }
+
+        public void setInterestMe(Boolean interestMe) {
+            this.interestMe = interestMe;
+        }
+
+        public Boolean getInterested() {
+            return interested;
+        }
+
+        public void setInterested(Boolean interested) {
+            this.interested = interested;
+        }
+
+        public int getTransRate() {
+            return transRate;
+        }
+
+        public void setTransRate(int transRate) {
+            this.transRate = transRate;
+        }
+
+        public Boolean getHaveFile() {
+            return haveFile;
+        }
+
+        public void setHaveFile(Boolean haveFile) {
+            this.haveFile = haveFile;
+        }
+
+        public Socket getSocket() {
+            return socket;
+        }
+
+        public void setSocket(Socket socket) {
+            this.socket = socket;
         }
     }
 

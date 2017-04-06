@@ -26,7 +26,7 @@ public class ManageFile {
      * @throws FileNotFoundException
      */
 
-    public ManageFile(Config config, int myID) throws FileNotFoundException {
+    public ManageFile(Config config, int myID) throws FileNotFoundException{
         this.config = config;
 
         String directory = "peer_" + myID + "/";
@@ -37,55 +37,42 @@ public class ManageFile {
             dir.mkdirs();
         }
 
-        file = new RandomAccessFile(directory + config.FileName, "rw");
+        file = new RandomAccessFile(directory + config.getFileName(), "rw");
+
 
     }
 
-    public synchronized MakePieces readPieceMsg(int pieceIndex) throws IOException {
-        int messageLength = 0;
-        if (pieceIndex == config.PieceSize - 1) {
-            messageLength = config.FileSize - config.PieceSize * pieceIndex;
+    public synchronized  FilePiece readMsg(int index) throws IOException {
+        int length = 0;
+        if(index == config.getPieceNum()-1){
+            length = config.getRemainPieceSize();
         } else {
-            messageLength = config.PieceSize;
+            length = config.getPieceSize();
+        }
+        int offset = index * config.getPieceSize();
+        byte[] data = new byte[length];
+
+        try {
+            file.seek(offset);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        int fileStart = pieceIndex * config.getPieceSize();
-        file.seek(fileStart);
-        Byte[] fileByte = new Byte[messageLength];
-        for (int i = 0; i < messageLength; i++) {
-            fileByte[i] = file.readByte();
+        for (int i = 0; i < length; i++) {
+            data[i] = file.readByte();
         }
-        MakePieces makePieces;
-        makePieces = new MakePieces(pieceIndex, fileByte);
-        return makePieces;
+
+        FilePiece filePiece = new FilePiece(index, data);
+        return filePiece;
     }
 
-    /**
-     * fetch file piece according to the index
-     * packed into a piece message and transform into a byte stream
-     * and return
-     *
-     * @paramindex
-     * @return byte[]
-     * @throws IOException
-     */
+    
 
-    public synchronized void writePieceMsg(MakePieces makePieces) throws IOException {
-        int startPosition = makePieces.getPieceIndex() * config.getPieceSize();
-        int pieceslength = makePieces.getPiecesArray().length;
-        Byte[] piecesByte = makePieces.getPiecesArray();
-        file.seek(startPosition);
-        for (int i = 0; i < pieceslength; i++) {
-            file.write(piecesByte[i]);
-        }
+    public synchronized void writeMsg(FilePiece filePiece) throws IOException {
+        int offset = filePiece.getPieceIndex()*config.getPieceSize();
+        byte[] data = filePiece.getPiecesArray();
+        file.seek(offset);
+        file.write(data, offset, data.length);
     }
 
-
-    /**
-     * read the pay load of the Actual message
-     * store data into a piece class
-     * or directly write into the corresponding position of the temp file
-     * @param msg
-     * @throws IOException
-     */
 }
