@@ -86,7 +86,6 @@ public class peerProcess  {
     }
 
     private void waitHandshake(Config.Peer peer) {
-
     }
 
     /**
