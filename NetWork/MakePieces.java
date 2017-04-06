@@ -9,10 +9,10 @@ public class MakePieces {
    You can get pieceIndex and piecesArray by these methords below;
  */
     private final int pieceIndex;
-    private final byte[] piecesArray;
+    private final Byte[] piecesArray;
 
 
-    public MakePieces(int pieceIndex, byte[] piecesArray){
+    public MakePieces(int pieceIndex, Byte[] piecesArray){
         this.pieceIndex = pieceIndex;
         this.piecesArray = piecesArray;
     }
@@ -21,7 +21,7 @@ public class MakePieces {
         return pieceIndex;
     }
 
-    public byte[] getPiecesArray(){
+    public Byte[] getPiecesArray(){
         return piecesArray;
     }
 }
