@@ -37,7 +37,6 @@ public class ActualMsg {
         this.msgType=msgType;
         this.msgPaylod = msgPaylod;
         //split msg[]
-
     }
 
     ActualMsg(BitField bitField) {

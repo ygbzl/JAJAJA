@@ -147,9 +147,9 @@ public class Config {
         return PieceSize;
     }
 
-    public ArrayList<Peer> getPeers() {
+    /*public ArrayList<Peer> getPeers() {
         return peers;
-    }
+    }*/
 
     public int getPieceNum() {
         return pieceNum;
@@ -181,6 +181,10 @@ public class Config {
 
     public int getMyIndex() {
         return myIndex;
+    }
+
+    public ArrayList<Peer> getPeers() {
+        return peers;
     }
 
     class Peer {
@@ -317,34 +321,6 @@ public class Config {
         }
     }
 
-
-    public int getNumberOfPreferedNeighbors(){
-        return NumberOfPreferedNeighbors;
-    }
-
-    public int getUnchokinInterval(){
-        return UnchokinInterval;
-    }
-
-    public int getOptUnchockingInterval(){
-        return OptUnchockingInterval;
-    }
-
-    public String getFileName(){
-        return FileName;
-    }
-
-    public int getFileSize(){
-        return FileSize;
-    }
-
-    public int getPieceSize(){
-        return PieceSize;
-    }
-
-    public HashMap<Integer,Peer> getPeers(){
-        return peers;
-    }
 }
 
 /*
