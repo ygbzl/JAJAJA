@@ -113,13 +113,6 @@ class onePeerState {
         isChoke = choke;
     }
 
-    /**
-     * add index into the interest list
-     * @param index
-     */
-    void addInterest(int index){
-        bitField.addInterest(index);
-    }
 
     /**
      * remove index from the interest list
