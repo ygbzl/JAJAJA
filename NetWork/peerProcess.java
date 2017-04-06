@@ -80,8 +80,11 @@ public class peerProcess  {
             throw new Exception("Error occurs on hand shaking");
         }
         ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
-        bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
-        //no need to process recieved bitfield message
+        if (config.getMyFile()) {
+            bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
+        }
+        bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+
 
     }
 
