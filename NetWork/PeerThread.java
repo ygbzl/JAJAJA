@@ -66,12 +66,14 @@ public class PeerThread implements Runnable {
                                 peerProcess.config.getPeers().get(peerIndex).setInterested(true);
                                 ActualMsg interest = new ActualMsg(ActualMsg.MsgType.INTERESTED);
                                 interest.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
+                                peerProcess.config.getPeers().get(peerIndex).getBitField().setPiece(temp.getIndex());
+                                peerProcess.config.getPeers().get(peerIndex).getBitField().setInterest(temp.getIndex());
                             } else {
                                 peerProcess.config.getPeers().get(peerIndex).setInterested(false);
                                 ActualMsg notInterest = new ActualMsg(ActualMsg.MsgType.NOTINTERESTED);
                                 notInterest.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
+                                peerProcess.config.getPeers().get(peerIndex).getBitField().setPiece(temp.getIndex());
                             }
-                            peerProcess.config.getPeers().get(peerIndex).getBitField().setPiece(temp.getIndex());
                             break;
 
                         case BITFIELD:
@@ -92,11 +94,23 @@ public class PeerThread implements Runnable {
 
                         case PIECE:
                             // received piece message, write the piece into file,
-                            // remove the index of piece from interestlist in my bitfield,
+                            // remove the index of piece from interestlist of my bitfield,
+                            // remove the index of piece from interestlist of ALL peers.
                             // check if I am still interested in this peer.
                             // if interest and not be chocked, send another request.
                             peerProcess.fileManager.writeMsg(new FilePiece(temp));
                             peerProcess.config.getMyBitField().removeInterest(temp.getIndex());
+                            peerProcess.config.getMyBitField().setPiece(temp.getIndex());
+
+                            for (int i = 0; i < peerProcess.config.getPeers().size(); i++) {
+                                peerProcess.config.getPeers().get(i).getBitField().removeInterest(temp.getIndex());
+                                peerProcess.config.getPeers().get(i).setInterested(peerProcess.config.getPeers().get(i).getBitField().isInterested());
+                            }
+
+                            if(peerProcess.config.getPeers().get(peerIndex).getInterested() && peerProcess.config.getPeers().get(peerIndex).getChoked()) {
+                                //if still interest this peer and not been choked
+                            }
+
                             break;
                     }
                 }
