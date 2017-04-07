@@ -11,7 +11,10 @@ public class FilePiece {
     private final int pieceIndex;
     private final byte[] piecesArray;
 
-
+    public FilePiece(ActualMsg actualMsg){
+        this.pieceIndex = actualMsg.getIndex();
+        this.piecesArray = actualMsg.msgLength;
+    }
     public FilePiece(int pieceIndex, byte[] piecesArray) {
         this.pieceIndex = pieceIndex;
         this.piecesArray = piecesArray;
@@ -26,4 +29,5 @@ public class FilePiece {
 
         return piecesArray;
     }
+
 }

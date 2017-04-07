@@ -16,19 +16,6 @@ public class ConstantMethod {
      * @param in
      * @return  Type ActualMsg
      */
-    public static ActualMsg receiveActualMsg(InputStream in) throws IOException {
-        byte[] msgLength = new byte[4];
-        byte[] msgType_temp=new byte[1];
-        in.read(msgLength);
-        in.read(msgType_temp);
-        byte msgType = msgType_temp[0];
-        int length = bytesToInt(msgLength);
-        byte[] msgPayLoad = new byte[length];
-        in.read(msgPayLoad);
-        return new ActualMsg(msgLength, msgType, msgPayLoad);
-
-
-    }
 
 
     /**
