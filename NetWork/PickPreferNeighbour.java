@@ -13,7 +13,7 @@ public class PickPreferNeighbour implements Runnable{
      private boolean unchoke;
      private ActualMsg actualMsg;
      private int pid;
-     public static ArrayList<Config.Peer> neighbourPeers;
+
 
      public PickPreferNeighbour(int interval, Config config, ArrayList<Config.Peer> peers, BitField bitField, int pid) {
          this.interval = interval;
@@ -23,12 +23,7 @@ public class PickPreferNeighbour implements Runnable{
          this.unchoke = unchoke;
          this.pid = pid;
      }
-     public static ArrayList<Config.Peer> getNeighbourPeers(){
-         return neighbourPeers;
-    }
-    public static synchronized void setNeighbourPeers(ArrayList<Config.Peer> neighbour){
-         neighbourPeers = neighbour;
-    }
+
     @Override
     public void run() {
          while(true){;

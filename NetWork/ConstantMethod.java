@@ -8,7 +8,7 @@ import java.io.InputStream;
  * Created by zhupd on 2/20/2017.
  */
 public class ConstantMethod {
-    
+
 
 
     /**

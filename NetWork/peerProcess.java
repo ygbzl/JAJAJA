@@ -3,6 +3,7 @@ package NetWork;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import static NetWork.ActualMsg.*;
 import static NetWork.ConstantMethod.*;
@@ -19,6 +20,7 @@ public class peerProcess  {
     HandShakeMsg handshake;
     int myID;
     int guestID;
+    public static ArrayList<Config.Peer> neighbourPeers;
 
     final byte[] chokeMsg = {0,0,0,1,0};
     final byte[] unchokeMsg = {0,0,0,1,1};
@@ -33,6 +35,12 @@ public class peerProcess  {
         config = new Config(myID);
         fileManager = new ManageFile(config);
         handshake = new HandShakeMsg(myID);
+    }
+    public static ArrayList<Config.Peer> getNeighbourPeers(){
+        return neighbourPeers;
+    }
+    public static synchronized void setNeighbourPeers(ArrayList<Config.Peer> neighbour){
+        neighbourPeers = neighbour;
     }
 
     /**
