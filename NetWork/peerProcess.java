@@ -1,6 +1,7 @@
 package NetWork;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import static NetWork.ActualMsg.*;
@@ -46,10 +47,15 @@ public class peerProcess  {
         for (int i = 0; i < config.getMyIndex(); i++) {
             sendHandShake(config.getPeers().get(i));
         }
-        //Waiting for the handshake message from the peers whose pid greater than me
-        for (int i = config.getMyIndex(); i < config.getPeers().size(); i++) {
-            waitHandshake(config.getPeers().get(i));
+        //when I'm not the last one in the PeerInfo.cfg
+        if (config.getMyIndex() != config.getPeers().size()) {
+            ServerSocket serverSocket = new ServerSocket(config.getMyPort());
+            //Waiting for the handshake message from the peers whose pid greater than me
+            for (int i = config.getMyIndex(); i < config.getPeers().size(); i++) {
+                waitHandshake(config.getPeers().get(i), serverSocket);
+            }
         }
+
         //read input stream
         //Socket socket = new Socket(peer.IP, peer.port);
 
@@ -75,20 +81,37 @@ public class peerProcess  {
     }
 
     private void sendHandShake(Config.Peer peer) throws Exception {
+        peer.setSocket();
         handshake.sendMsg(peer.getSocket().getOutputStream());
         if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()){
             throw new Exception("Error occurs on hand shaking");
         }
         ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
+
         if (config.getMyFile()) {
             bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
         }
-        bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
 
+        if (peer.getHaveFile()){
+            bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+        }
 
     }
 
-    private void waitHandshake(Config.Peer peer) {
+    private void waitHandshake(Config.Peer peer, ServerSocket serverSocket) throws Exception {
+        peer.setSocket(serverSocket.accept());
+        handshake.readMsg(peer.getSocket().getInputStream());
+        handshake.sendMsg(peer.getSocket().getOutputStream());
+
+        ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
+
+        if (config.getMyFile()) {
+            bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
+        }
+
+        if (peer.getHaveFile()){
+            bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+        }
     }
 
     /**
