@@ -26,7 +26,7 @@ public class PickPreferNeighbour implements Runnable{
 
     @Override
     public void run() {
-         while(true){;
+         while(true){
 
          }
 
