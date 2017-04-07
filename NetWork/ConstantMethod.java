@@ -8,14 +8,6 @@ import java.io.InputStream;
  * Created by zhupd on 2/20/2017.
  */
 public class ConstantMethod {
-
-
-    /**
-     * read byte stream from in and store as a AcutalMsg
-     *
-     * @param in
-     * @return  Type ActualMsg
-     */
     
 
 

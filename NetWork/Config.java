@@ -196,6 +196,8 @@ public class Config {
         Boolean interested;
         int transRate;
         Boolean haveFile;
+        String address;
+        int port;
         Socket socket;
 
         public Peer(String[] peerInfo) {
@@ -212,19 +214,19 @@ public class Config {
                 interestMe = false;
                 interested = false;
                 transRate = 0;
-                int port = 0;
+                address = peerInfo[1];
                 try {
                     port = Integer.parseInt(peerInfo[2]);
                 } catch (NumberFormatException e) {
                     System.out.print("invalid port" + peerInfo[2]);
                     e.printStackTrace();
                 }
-                try {
+                /*try {
                     socket = new Socket(peerInfo[1], port);
                 } catch (IOException e) {
                     System.out.print("failed to create socket to peer " + PID + ", address: " + peerInfo[1] + ", port: " + port);
                     e.printStackTrace();
-                }
+                }*/
                 int haveFile = 0;
                 try {
                     haveFile = Integer.parseInt(peerInfo[3]);
@@ -316,8 +318,20 @@ public class Config {
             return socket;
         }
 
+        public void setSocket() throws IOException {
+            socket = new Socket(address,port);
+        }
+
         public void setSocket(Socket socket) {
             this.socket = socket;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public int getPort() {
+            return port;
         }
     }
 
