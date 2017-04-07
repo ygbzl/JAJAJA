@@ -22,6 +22,7 @@ public class BitField {
         //this constructor is for peers.
         this.haveFile = haveFile;
         data = new byte[pieceNum];
+        interestList = new ArrayList<>();
         if (haveFile) {
             for (int i = 0; i < data.length; i++) {
                 data[i] = 1;
@@ -81,6 +82,12 @@ public class BitField {
         if (interestList.contains(index)) {
             interestList.remove(interestList.indexOf(index));
             setPiece(index);
+        }
+    }
+
+    public synchronized void setInterest(int intex){
+        if(!isInterested(intex)) {
+
         }
     }
 

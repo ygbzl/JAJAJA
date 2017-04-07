@@ -194,6 +194,8 @@ public class Config {
         Boolean choked;
         Boolean interestMe;
         Boolean interested;
+        Boolean preferedNeighbor;
+        Boolean optimisticNeighbor;
         int transRate;
         Boolean haveFile;
         String address;
@@ -213,6 +215,8 @@ public class Config {
                 choked = true;
                 interestMe = false;
                 interested = false;
+                preferedNeighbor = false;
+                optimisticNeighbor = false;
                 transRate = 0;
                 address = peerInfo[1];
                 try {
@@ -321,6 +325,22 @@ public class Config {
 
         public void setSocket() throws IOException {
             socket = new Socket(address,port);
+        }
+
+        public Boolean getPreferedNeighbor() {
+            return preferedNeighbor;
+        }
+
+        public void setPreferedNeighbor(Boolean preferedNeighbor) {
+            this.preferedNeighbor = preferedNeighbor;
+        }
+
+        public Boolean getOptimisticNeighbor() {
+            return optimisticNeighbor;
+        }
+
+        public void setOptimisticNeighbor(Boolean optimisticNeighbor) {
+            this.optimisticNeighbor = optimisticNeighbor;
         }
 
         public void setSocket(Socket socket) {
