@@ -6,19 +6,21 @@ package NetWork;
  */
 public class PeerThread implements Runnable {
     ActualMsg messager;
-    Config config;
-    ManageFile fileManager;
+    //Config config;
+    //ManageFile fileManager;
     Config.Peer peer;
 
-    PeerThread(Config config, ManageFile fileManager, Config.Peer peer){
+    PeerThread(Config.Peer peer){
         messager = new ActualMsg();
-        this.config = config;
-        this.fileManager = fileManager;
+        //this.config = config;
+        //this.fileManager = fileManager;
         this.peer = peer;
     }
 
     @Override
     public void run() {
+        //peerProcess.config;
+        //peerProcess.fileManager;
 
     }
 }

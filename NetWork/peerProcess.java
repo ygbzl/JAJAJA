@@ -13,9 +13,9 @@ import static NetWork.ManageFile.*;
  */
 public class peerProcess  {
 
-    public Config config;
+    public static Config config;
     PeerState peerState=new PeerState();
-    public ManageFile fileManager;
+    public static ManageFile fileManager;
     HandShakeMsg handshake;
     int myID;
     int guestID;
