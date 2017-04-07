@@ -13,9 +13,9 @@ import static NetWork.ManageFile.*;
  */
 public class peerProcess  {
 
-    Config config;
+    public Config config;
     PeerState peerState=new PeerState();
-    ManageFile fileManager;
+    public ManageFile fileManager;
     HandShakeMsg handshake;
     int myID;
     int guestID;
@@ -56,26 +56,54 @@ public class peerProcess  {
             }
         }
 
-        //read input stream
-        //Socket socket = new Socket(peer.IP, peer.port);
+        // send bitfield message and interest message
+        // initialize the interest flags
+        for (Config.Peer peer: config.getPeers()
+             ) {
+            ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
 
-        //InputStream in = new BufferedInputStream(socket.getInputStream());
-        //OutputStream out = new BufferedOutputStream(socket.getOutputStream());
+            if (config.getMyFile()) {
+                //if I have the whole file, send the bitfield message
+                bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
+                //wait for an interest message and then set the flag of this peer
+                //may add it into an interest list
+                bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+                peer.setInterestMe(true);
+                peer.setInterested(false);
+            }
 
-        //handshake = new HandShakeMsg(myID);
-        //handshake.sendMsg(out);
+            if (peer.getHaveFile()){
+                //if this peer have whole file, read and log the bitfield message
+                //then send interest message
+                bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+                ActualMsg interestMsg = new ActualMsg(MsgType.INTERESTED);
+                interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
+                peer.setInterestMe(false);
+                peer.setInterested(true);
+                //when the thread of this peer start, the first thing to do is waiting for the unchock message.
+            }
+        }
 
-        //send bitfield message
-        //TODO
+        //start optimistic peer unchock thread and prefered peers unchock thread here
 
-        while (true) {
+
+        //if I don't have file, begin download
+        if (!config.getMyFile()){
+
+        }
+        //I have file or download finished begin upload
+
+
+        //when finished upload, thread exit
+
+        /*while (true) {
             byte[] msgLength = new byte[4];
             byte[] msgType=new byte[1];
             //in.read(msgLength);
             //in.read(msgType);
 
             //if()
-        }
+        }*/
 
 
     }
@@ -86,15 +114,28 @@ public class peerProcess  {
         if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()){
             throw new Exception("Error occurs on hand shaking");
         }
-        ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
+        /*ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
 
         if (config.getMyFile()) {
+            //if I have the whole file, send the bitfield message
             bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
+            //wait for an interest message and then set the flag of this peer
+            //may add it into an interest list
+            bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+            peer.setInterestMe(true);
+            peer.setInterested(false);
         }
 
         if (peer.getHaveFile()){
+            //if this peer have whole file, read and log the bitfield message
+            //then send interest message
             bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
-        }
+            ActualMsg interestMsg = new ActualMsg(MsgType.INTERESTED);
+            interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
+            peer.setInterestMe(false);
+            peer.setInterested(true);
+            //when the thread of this peer start, the first thing to do is waiting for the unchock message.
+        }*/
 
     }
 
@@ -103,15 +144,28 @@ public class peerProcess  {
         handshake.readMsg(peer.getSocket().getInputStream());
         handshake.sendMsg(peer.getSocket().getOutputStream());
 
-        ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
+        /*ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
 
         if (config.getMyFile()) {
+            //if I have the whole file, send the bitfield message
             bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
+            //wait for an interest message and then set the flag of this peer
+            //may add it into an interest list
+            bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+            peer.setInterestMe(true);
+            peer.setInterested(false);
         }
 
         if (peer.getHaveFile()){
+            //if this peer have whole file, read and log the bitfield message
+            //then send interest message
             bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
-        }
+            ActualMsg interestMsg = new ActualMsg(MsgType.INTERESTED);
+            interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
+            peer.setInterestMe(false);
+            peer.setInterested(true);
+            //when the thread of this peer start, the first thing to do is waiting for the unchock message.
+        }*/
     }
 
     /**

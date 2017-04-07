@@ -209,8 +209,8 @@ public class Config {
                     e.printStackTrace();
                 }
                 bitField = new BitField(new byte[0]);
-                chockMe = false;
-                chocked = false;
+                chockMe = true;
+                chocked = true;
                 interestMe = false;
                 interested = false;
                 transRate = 0;
@@ -234,7 +234,8 @@ public class Config {
                     System.out.print("invalid have file info: " + peerInfo[3]);
                     e.printStackTrace();
                 }
-                if (haveFile == 1){
+                this.haveFile = haveFile == 1;
+                /*if (haveFile == 1){
                     this.haveFile = true;
                 } else if (haveFile == 0) {
                     this.haveFile = false;
@@ -245,7 +246,7 @@ public class Config {
                         System.out.print("invalid have file info: " + haveFile);
                         e.printStackTrace();
                     }
-                }
+                }*/
                 bitField = new BitField(this.haveFile, pieceNum);
             }
         }
