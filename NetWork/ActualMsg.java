@@ -27,9 +27,21 @@ public class ActualMsg {
             this.val = val;
         }
 
+        public int getTypeValue(MsgType msgType){
+            return msgType.val;
+        }
         byte getMsgType() {
             return (byte) val;
         }
+
+        public boolean isType(MsgType msgType){
+            if(this.val == msgType.val){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
     }
 
     ActualMsg(){
@@ -56,10 +68,16 @@ public class ActualMsg {
         this.msgLength = new byte[]{0, 0, 0, 1};
         this.msgPaylod = null;
         this.msgType=msgType.getMsgType();
+
     }
 
     ActualMsg(MsgType msgType, int index) {
         //for have message and request message
+            this.msgLength = new byte[]{0, 0, 0, 1};
+            this.type = msgType;
+            this.msgType = type.getMsgType();
+            this.msgPaylod = ConstantMethod.intToBytes(index);
+
     }
 
     ActualMsg(FilePiece piece) {
@@ -68,6 +86,7 @@ public class ActualMsg {
         this.msgType=type.getMsgType();
         this.msgLength = ConstantMethod.intToBytes(4 + piece.getPiecesArray().length);
         this.msgPaylod = piece.getPiecesArray();
+
     }
 
     byte[] msgLength;
@@ -85,9 +104,18 @@ public class ActualMsg {
         //todo
     }
 
-    void readActualMsg(InputStream in) {
+    public static ActualMsg readActualMsg(InputStream in) throws IOException {
 
         //todo
+        byte[] msgLength = new byte[4];
+        byte[] msgType_temp=new byte[1];
+        in.read(msgLength);
+        in.read(msgType_temp);
+        byte msgType = msgType_temp[0];
+        int length = ConstantMethod.bytesToInt(msgLength);
+        byte[] msgPayLoad = new byte[length];
+        in.read(msgPayLoad);
+        return new ActualMsg(msgLength, msgType, msgPayLoad);
     }
 
     int getIndex() {
