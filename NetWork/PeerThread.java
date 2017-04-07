@@ -49,17 +49,18 @@ public class PeerThread implements Runnable {
                             break;
 
                         case INTERESTED:
-                            //received interest message, set flag.
+                            //received interest message, set flag interestMe.
                             peerProcess.config.getPeers().get(peerIndex).setInterestMe(true);
                             break;
 
                         case NOTINTERESTED:
-                            //received not interest message, set flag.
+                            //received not interest message, set flag interestMe.
                             peerProcess.config.getPeers().get(peerIndex).setInterestMe(false);
                             break;
 
                         case HAVE:
-                            //received have message, update bitfield, send interest message if needed.
+                            //received have message, update peer's bitfield,
+                            // check my bitfield, set flag interested and send interest message if needed.
                             if(peerProcess.config.getMyBitField().isInterested(temp.getIndex())) {
                                 //if I am interested in this piece, set flag, send interest message.
                                 peerProcess.config.getPeers().get(peerIndex).setInterested(true);
@@ -70,12 +71,23 @@ public class PeerThread implements Runnable {
                                 ActualMsg notInterest = new ActualMsg(ActualMsg.MsgType.NOTINTERESTED);
                                 notInterest.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
                             }
+                            peerProcess.config.getPeers().get(peerIndex).getBitField().setPiece(temp.getIndex());
                             break;
 
                         case BITFIELD:
+                            //nothing to do here
                             break;
 
                         case REQUEST:
+                            //check if this peer is choked
+                            if (!peerProcess.config.getPeers().get(peerIndex).getChoked()){
+                                //if not choked, then send the piece which is requested.
+                                ActualMsg piece = new ActualMsg(peerProcess.fileManager.readMsg(temp.getIndex()));
+                                piece.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
+                            } else {
+                                //if choked, just ignore this request.
+                                break;
+                            }
                             break;
 
                         case PIECE:

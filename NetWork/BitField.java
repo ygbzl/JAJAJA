@@ -11,6 +11,7 @@ public class BitField {
     byte[] data;
     Boolean[] bdata;
     private ArrayList<Integer> interestList; //which pieces i am interested in
+    Boolean haveFile;
 
     BitField(byte[] payload) {
         //this constructor will never be called
@@ -19,6 +20,7 @@ public class BitField {
 
     BitField(Boolean haveFile, int pieceNum) {
         //this constructor is for peers.
+        this.haveFile = haveFile;
         data = new byte[pieceNum];
         if (haveFile) {
             for (int i = 0; i < data.length; i++) {
@@ -35,6 +37,7 @@ public class BitField {
 
     BitField(Boolean haveFile, int pieceNum, int isMe) {
         //this constructor is for myself, the value of isMe doesn't matter.
+        this.haveFile = haveFile;
         data = new byte[pieceNum];
         interestList = new ArrayList<>();
         if (haveFile) {
@@ -75,14 +78,30 @@ public class BitField {
     }*/
 
     public synchronized void removeInterest(int index){
-        interestList.remove(interestList.indexOf(index));
-
+        if (interestList.contains(index)) {
+            interestList.remove(interestList.indexOf(index));
+            setPiece(index);
+        }
     }
 
     public int randomSelectIndex(Random r){
 
-        return r.nextInt(interestList.size());
+        return interestList.get(r.nextInt(interestList.size()));
 
+    }
+
+    public void setPiece(int index) {
+        if (index < data.length) {
+            data[index] = 1;
+            bdata[index] = true;
+        }
+
+        for (int i = 0; i < bdata.length; i++) {
+            if (!bdata[i]){
+                return;
+            }
+        }
+        haveFile = true;
     }
 
     public byte[] getData() {
