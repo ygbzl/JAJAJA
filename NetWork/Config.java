@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class Config {
     int NumberOfPreferedNeighbors;
     int UnchokinInterval;
-    int OptUnchockingInterval;
+    int OptUnchokingInterval;
     String FileName;
     int FileSize;
     int PieceSize;
@@ -63,7 +63,7 @@ public class Config {
         UnchokinInterval =
                 Integer.parseInt(br.readLine().split(" ")[1]);
 
-        OptUnchockingInterval =
+        OptUnchokingInterval =
                 Integer.parseInt(br.readLine().split(" ")[1]);
 
         FileName =
@@ -131,8 +131,8 @@ public class Config {
         return UnchokinInterval;
     }
 
-    public int getOptUnchockingInterval() {
-        return OptUnchockingInterval;
+    public int getOptUnchokingInterval() {
+        return OptUnchokingInterval;
     }
 
     public String getFileName() {
@@ -190,8 +190,8 @@ public class Config {
     class Peer {
         int PID;
         BitField bitField;
-        Boolean chockMe;
-        Boolean chocked;
+        Boolean chokeMe;
+        Boolean choked;
         Boolean interestMe;
         Boolean interested;
         int transRate;
@@ -209,8 +209,8 @@ public class Config {
                     e.printStackTrace();
                 }
                 bitField = new BitField(new byte[0]);
-                chockMe = true;
-                chocked = true;
+                chokeMe = true;
+                choked = true;
                 interestMe = false;
                 interested = false;
                 transRate = 0;
@@ -267,20 +267,20 @@ public class Config {
             this.bitField = bitField;
         }
 
-        public Boolean getChockMe() {
-            return chockMe;
+        public Boolean getChokeMe() {
+            return chokeMe;
         }
 
-        public void setChockMe(Boolean chockMe) {
-            this.chockMe = chockMe;
+        public void setChokeMe(Boolean chokeMe) {
+            this.chokeMe = chokeMe;
         }
 
-        public Boolean getChocked() {
-            return chocked;
+        public Boolean getChoked() {
+            return choked;
         }
 
-        public void setChocked(Boolean chocked) {
-            this.chocked = chocked;
+        public void setChoked(Boolean choked) {
+            this.choked = choked;
         }
 
         public Boolean getInterestMe() {

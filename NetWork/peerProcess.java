@@ -20,8 +20,8 @@ public class peerProcess  {
     int myID;
     int guestID;
 
-    final byte[] chockMsg = {0,0,0,1,0};
-    final byte[] unchockMsg = {0,0,0,1,1};
+    final byte[] chokeMsg = {0,0,0,1,0};
+    final byte[] unchokeMsg = {0,0,0,1,1};
     final byte[] interestedMsg = {0,0,0,1,2};
     final byte[] notInterestedMsg = {0,0,0,1,3};
 
@@ -80,11 +80,11 @@ public class peerProcess  {
                 interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
                 peer.setInterestMe(false);
                 peer.setInterested(true);
-                //when the thread of this peer start, the first thing to do is waiting for the unchock message.
+                //when the thread of this peer start, the first thing to do is waiting for the unchoke message.
             }
         }
 
-        //start optimistic peer unchock thread and prefered peers unchock thread here
+        //start optimistic peer unchoke thread and prefered peers unchoke thread here
 
 
         //if I don't have file, begin download
@@ -134,7 +134,7 @@ public class peerProcess  {
             interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
             peer.setInterestMe(false);
             peer.setInterested(true);
-            //when the thread of this peer start, the first thing to do is waiting for the unchock message.
+            //when the thread of this peer start, the first thing to do is waiting for the unchoke message.
         }*/
 
     }
@@ -164,7 +164,7 @@ public class peerProcess  {
             interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
             peer.setInterestMe(false);
             peer.setInterested(true);
-            //when the thread of this peer start, the first thing to do is waiting for the unchock message.
+            //when the thread of this peer start, the first thing to do is waiting for the unchoke message.
         }*/
     }
 
