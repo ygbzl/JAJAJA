@@ -91,6 +91,12 @@ public class PeerThread implements Runnable {
                             break;
 
                         case PIECE:
+                            // received piece message, write the piece into file,
+                            // remove the index of piece from interestlist in my bitfield,
+                            // check if I am still interested in this peer.
+                            // if interest and not be chocked, send another request.
+                            peerProcess.fileManager.writeMsg(new FilePiece(temp));
+                            peerProcess.config.getMyBitField().removeInterest(temp.getIndex());
                             break;
                     }
                 }
