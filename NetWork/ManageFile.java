@@ -73,5 +73,4 @@ public class ManageFile {
         file.seek(offset);
         file.write(data, offset, data.length);
     }
-
 }

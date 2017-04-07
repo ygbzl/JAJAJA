@@ -1,6 +1,7 @@
 package NetWork;
 
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -23,7 +24,6 @@ public class ActualMsg {
         final int val;
 
         MsgType(int val) {
-
             this.val = val;
         }
 
@@ -52,6 +52,10 @@ public class ActualMsg {
 
     ActualMsg(MsgType msgType) {
         //for no payload message
+        this.type = msgType;
+        this.msgLength = new byte[]{0, 0, 0, 1};
+        this.msgPaylod = null;
+        this.msgType=msgType.getMsgType();
     }
 
     ActualMsg(MsgType msgType, int index) {
@@ -60,6 +64,10 @@ public class ActualMsg {
 
     ActualMsg(FilePiece piece) {
         //for piece message
+        this.type=MsgType.PIECE;
+        this.msgType=type.getMsgType();
+        this.msgLength = ConstantMethod.intToBytes(4 + piece.getPiecesArray().length);
+        this.msgPaylod = piece.getPiecesArray();
     }
 
     byte[] msgLength;
@@ -70,8 +78,10 @@ public class ActualMsg {
     /**
      * send actual msg
      */
-    void sendActualMsg(OutputStream out) {
-
+    public void sendActualMsg(OutputStream out) throws IOException{
+        byte[] toSend = ConstantMethod.mergeBytes(this.msgLength, new byte[]{this.msgType});
+        toSend = ConstantMethod.mergeBytes(toSend, this.msgPaylod);
+        out.write(toSend);
         //todo
     }
 

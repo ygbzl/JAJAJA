@@ -26,8 +26,6 @@ public class ConstantMethod {
         byte[] msgPayLoad = new byte[length];
         in.read(msgPayLoad);
         return new ActualMsg(msgLength, msgType, msgPayLoad);
-
-
     }
 
 
