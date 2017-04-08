@@ -343,6 +343,7 @@ public class Config {
 
         public void setSocket() throws IOException {
             socket = new Socket(address,port);
+
         }
 
         public Boolean getPreferedNeighbor() {

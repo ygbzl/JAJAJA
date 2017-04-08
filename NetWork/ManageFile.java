@@ -73,4 +73,8 @@ public class ManageFile {
         file.seek(offset);
         file.write(data, offset, data.length);
     }
+
+    public void closeManageFile () throws IOException {
+        file.close();
+    }
 }
