@@ -130,11 +130,13 @@ public class PeerThread implements Runnable {
                         for (Config.Peer peer: peerProcess.config.getPeers()
                              ) {
                             if(peer.getBitField().getHaveFile()){
-
+                                peerProcess.config.setMyFile(true);
                             }
                         }
-
                     }
+
+                    if (peerProcess.config.getMyFile()&&peerProcess.config.getMyFile())
+                        break;
                 }
             } catch (IOException e) {
                 e.printStackTrace();

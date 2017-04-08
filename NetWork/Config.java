@@ -200,6 +200,7 @@ public class Config {
         private Boolean interested;
         private Boolean preferedNeighbor;
         private Boolean optimisticNeighbor;
+        private int transNumber;
         private int transRate;
         private Boolean haveFile;
         private String address;
@@ -257,6 +258,18 @@ public class Config {
                 }*/
                 bitField = new BitField(this.haveFile, pieceNum);
             }
+        }
+
+        public int getTransNumber() {
+            return transNumber;
+        }
+
+        public void setTransNumber(int transNumber) {
+            this.transNumber = transNumber;
+        }
+
+        public void incTransNumber() {
+            this.transNumber++;
         }
 
         public int getPID() {
