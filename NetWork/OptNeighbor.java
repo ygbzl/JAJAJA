@@ -59,9 +59,7 @@ public class OptNeighbor implements Runnable {
                 ckMst.sendActualMsg(lastOpt.getSocket().getOutputStream());
             }
         }
-
         lastOpt=curOpt;
-
     }
 
 }

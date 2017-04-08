@@ -1,9 +1,7 @@
 package NetWork;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by challengezwb on 4/7/17.
@@ -13,11 +11,13 @@ public class PickPreferNeighbour implements Runnable{
      private ArrayList<Config.Peer> preferedPeers;
      private ActualMsg actualMsg;
      private int number;
+    public ArrayList<Config.Peer> peers;
 
 
      public PickPreferNeighbour() throws IOException{
          this.interval = peerProcess.config.getUnchokinInterval();
          this.number = peerProcess.config.getNumberOfPreferedNeighbors();
+         this.peers = peerProcess.config.getPeers();
      }
 
     @Override
@@ -48,8 +48,17 @@ public class PickPreferNeighbour implements Runnable{
         }
     }
 
-    public Config.Peer[] sortPeers(){
-           return null;
+    public List<Config.Peer> sortPeers(){
+        PriorityQueue<Config.Peer> pq = new PriorityQueue<>(number+1, (a,b) -> a.getTransRate()-b.getTransRate());
+        for (Config.Peer x : peers) {
+            if(pq.size()==number+1){
+                pq.poll();
+            }
+            pq.offer(x);
+        }
+        pq.poll();
+        List<Config.Peer> res = new ArrayList<>(pq);
+        return res;
     }
 
 
