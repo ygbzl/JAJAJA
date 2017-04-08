@@ -35,6 +35,7 @@ public class peerProcess  {
         config = new Config(myID);
         fileManager = new ManageFile(config);
         handshake = new HandShakeMsg(myID);
+        neighbourPeers = new ArrayList<>();
     }
     public static ArrayList<Config.Peer> getNeighbourPeers(){
         return neighbourPeers;
