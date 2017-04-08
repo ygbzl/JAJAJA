@@ -1,6 +1,8 @@
 package NetWork;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by challengezwb on 4/7/17.
@@ -13,24 +15,42 @@ public class PickPreferNeighbour implements Runnable{
      private boolean unchoke;
      private ActualMsg actualMsg;
      private int pid;
+     private int number = config.getNumberOfPreferedNeighbors();
 
 
-     public PickPreferNeighbour(int interval, Config config, ArrayList<Config.Peer> peers, BitField bitField, int pid) {
-         this.interval = interval;
-         this.config = config;
-         this.peers = peers;
-         this.bitField = bitField;
-         this.unchoke = unchoke;
-         this.pid = pid;
+     public PickPreferNeighbour() {
+         this.interval = config.getUnchokinInterval();
+         this.peers = config.getPeers();
+         this.pid = config.getMyPid();
      }
 
     @Override
     public void run() {
+         firstChoose();
          while(true){
-
+           ArrayList<Config.Peer> temp = peers;
+           peers = choose(temp);
          }
-
-
-
     }
+
+    private ArrayList<Config.Peer> choose(ArrayList<Config.Peer> neighbourPeers) {
+        return null;
+    }
+
+    public void firstChoose(){
+        //Random random = new Random(config.getNumberOfPreferedNeighbors());
+        for(int i = 0;i < number;i++){
+            Random random = new Random(number);
+            int index = peerProcess.neighbourPeers.indexOf(random);
+            peerProcess.getNeighbourPeers().get(index).choked = false;
+            peerProcess.getNeighbourPeers().get(index).preferedNeighbor = true;
+            peers.add(peerProcess.neighbourPeers.get(index));
+
+        }
+    }
+
+    public Config.Peer[] sortPeers(){
+           return null;
+    }
+
 }
