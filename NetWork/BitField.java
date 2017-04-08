@@ -121,6 +121,10 @@ public class BitField {
         }
     }
 
+    public Boolean getHaveFile() {
+        return haveFile;
+    }
+
     public byte[] getData() {
         return data;
     }

@@ -151,6 +151,10 @@ public class Config {
         return peers;
     }*/
 
+    public void setMyFile(Boolean myFile) {
+        this.myFile = myFile;
+    }
+
     public int getPieceNum() {
         return pieceNum;
     }
