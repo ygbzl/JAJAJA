@@ -136,18 +136,6 @@ public class PeerThread implements Runnable {
                     }
                 }
 
-                    /*if (peerProcess.config.getMyBitField().getHaveFile()){
-                        //if I have whole file.
-                        for (Config.Peer peer: peerProcess.config.getPeers()
-                             ) {
-                            if(peer.getBitField().getHaveFile()){
-                                peerProcess.config.setMyFile(true);
-                            }
-                        }
-                    }
-
-                    if (peerProcess.config.getMyFile()&&peerProcess.config.getMyFile())
-                        break;*/
             }
             peerProcess.config.getPeers().get(peerIndex).getSocket().close();
         } catch (IOException e) {
