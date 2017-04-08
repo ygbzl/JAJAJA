@@ -151,6 +151,10 @@ public class Config {
         return peers;
     }*/
 
+    public void setMyFile(Boolean myFile) {
+        this.myFile = myFile;
+    }
+
     public int getPieceNum() {
         return pieceNum;
     }
@@ -188,19 +192,20 @@ public class Config {
     }
 
     class Peer {
-        int PID;
-        BitField bitField;
-        Boolean chokeMe;
-        Boolean choked;
-        Boolean interestMe;
-        Boolean interested;
-        Boolean preferedNeighbor;
-        Boolean optimisticNeighbor;
-        int transRate;
-        Boolean haveFile;
-        String address;
-        int port;
-        Socket socket;
+        private int PID;
+        private BitField bitField;
+        private Boolean chokeMe;
+        private Boolean choked;
+        private Boolean interestMe;
+        private Boolean interested;
+        private Boolean preferedNeighbor;
+        private Boolean optimisticNeighbor;
+        private int transNumber;
+        private int transRate;
+        private Boolean haveFile;
+        private String address;
+        private int port;
+        private Socket socket;
 
         public Peer(String[] peerInfo) {
             if (peerInfo.length == 4) {
@@ -218,6 +223,7 @@ public class Config {
                 preferedNeighbor = false;
                 optimisticNeighbor = false;
                 transRate = 0;
+                transNumber = 0;
                 address = peerInfo[1];
                 try {
                     port = Integer.parseInt(peerInfo[2]);
@@ -253,6 +259,18 @@ public class Config {
                 }*/
                 bitField = new BitField(this.haveFile, pieceNum);
             }
+        }
+
+        public int getTransNumber() {
+            return transNumber;
+        }
+
+        public void setTransNumber(int transNumber) {
+            this.transNumber = transNumber;
+        }
+
+        public void incTransNumber() {
+            this.transNumber++;
         }
 
         public int getPID() {

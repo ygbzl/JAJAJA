@@ -73,6 +73,10 @@ public class BitField {
         return interestList.contains(index);
     }
 
+    public boolean isInterested(){
+        return !interestList.isEmpty();
+    }
+
     /*void addInterest(int index){
         interestList.add(index);
 
@@ -81,23 +85,22 @@ public class BitField {
     public synchronized void removeInterest(int index){
         if (interestList.contains(index)) {
             interestList.remove(interestList.indexOf(index));
-            setPiece(index);
         }
     }
 
     public synchronized void setInterest(int intex){
         if(!isInterested(intex)) {
-
+            interestList.add(intex);
         }
     }
 
-    public int randomSelectIndex(Random r){
+    public synchronized int randomSelectIndex(Random r){
 
         return interestList.get(r.nextInt(interestList.size()));
 
     }
 
-    public void setPiece(int index) {
+    public synchronized void setPiece(int index) {
         if (index < data.length) {
             data[index] = 1;
             bdata[index] = true;
@@ -109,6 +112,17 @@ public class BitField {
             }
         }
         haveFile = true;
+    }
+
+    public synchronized void removePiece(int index){
+        if (index < data.length) {
+            data[index] = 0;
+            bdata[index] = false;
+        }
+    }
+
+    public Boolean getHaveFile() {
+        return haveFile;
     }
 
     public byte[] getData() {
