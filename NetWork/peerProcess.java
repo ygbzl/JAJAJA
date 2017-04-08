@@ -15,20 +15,20 @@ import static NetWork.ManageFile.*;
 public class peerProcess  {
 
     public static Config config;
-    PeerState peerState=new PeerState();
+    //PeerState peerState=new PeerState();
     public static ManageFile fileManager;
     HandShakeMsg handshake;
     int myID;
-    int guestID;
+    //int guestID;
     public static ArrayList<Config.Peer> neighbourPeers;
 
-    final byte[] chokeMsg = {0,0,0,1,0};
+    /*final byte[] chokeMsg = {0,0,0,1,0};
     final byte[] unchokeMsg = {0,0,0,1,1};
     final byte[] interestedMsg = {0,0,0,1,2};
     final byte[] notInterestedMsg = {0,0,0,1,3};
 
     byte[] haveMsg = {0,0,0,5,4};
-    byte[] requstMsg = {0,0,0,5,6};
+    byte[] requstMsg = {0,0,0,5,6};*/
 
     peerProcess(int pid) throws IOException {
         myID = pid;
@@ -93,11 +93,10 @@ public class peerProcess  {
                 //when the thread of this peer start, the first thing to do is waiting for the unchoke message.
             }
         }
+        //start peerThread here
+
 
         //start optimistic peer unchoke thread and prefered peers unchoke thread here
-
-
-        //start peerThread here
 
 
         //when finished download, thread exit
@@ -106,14 +105,14 @@ public class peerProcess  {
         //close all Sockets and files
         //server socket has closed after hand shake.
         fileManager.closeManageFile();
-
-
+        for (Config.Peer peer: config.getPeers()) {
+            peer.getSocket().close();
+        }
 
     }
 
     private void sendHandShake(Config.Peer peer) throws Exception {
         peer.setSocket();
-        peer.getSocket();
         handshake.sendMsg(peer.getSocket().getOutputStream());
         if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()){
             throw new Exception("Error occurs on hand shaking");

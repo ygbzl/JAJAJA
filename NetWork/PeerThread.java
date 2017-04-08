@@ -2,26 +2,30 @@ package NetWork;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
  * Created by leqi on 2017/4/7.
  */
 public class PeerThread implements Runnable {
-    ActualMsg receiver;
+    //ActualMsg receiver;
     //Config config;
     //ManageFile fileManager;
-    Config.Peer peer;
-    int pid;
-    int peerIndex;
-    Random random;
+    private Config.Peer guestPeer;
+    //private int pid;
+    //private int peerIndex;
+    private Random random;
+    private ArrayList<Config.Peer> peerArrayList;
 
-    PeerThread(Config.Peer peer, int index) {
-        receiver = new ActualMsg();
+    PeerThread(Config.Peer peer) {
+        //receiver = new ActualMsg();
         //this.config = config;
         //this.fileManager = fileManager;
-        pid = peer.getPID();
-        peerIndex = index;
+        guestPeer = peer;
+        peerArrayList = peerProcess.config.getPeers();
+        //pid = peer.getPID();
+        //peerIndex = index;
         random = new Random(System.currentTimeMillis());
     }
 
@@ -34,28 +38,28 @@ public class PeerThread implements Runnable {
         Boolean t = true;
         try {
             while (t) {
-                ActualMsg temp = receiver.readActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getInputStream());
+                ActualMsg temp = ActualMsg.readActualMsg(guestPeer.getSocket().getInputStream());
                 switch (temp.getType()) {
                     case CHOKE:
                         //received choke message, set flag chokeMe.
-                        peerProcess.config.getPeers().get(peerIndex).setChokeMe(true);
+                        guestPeer.setChokeMe(true);
                         break;
 
                     case UNCHOKE:
                         //received unchoke message, set flag chokeMe, send request message.
-                        peerProcess.config.getPeers().get(peerIndex).setChokeMe(false);
-                        ActualMsg request = new ActualMsg(ActualMsg.MsgType.REQUEST, peerProcess.config.getPeers().get(peerIndex).getBitField().randomSelectIndex(random));
-                        request.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
+                        guestPeer.setChokeMe(false);
+                        ActualMsg request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
+                        request.sendActualMsg(guestPeer.getSocket().getOutputStream());
                         break;
 
                     case INTERESTED:
                         //received interest message, set flag interestMe.
-                        peerProcess.config.getPeers().get(peerIndex).setInterestMe(true);
+                        guestPeer.setInterestMe(true);
                         break;
 
                     case NOTINTERESTED:
                         //received not interest message, set flag interestMe.
-                        peerProcess.config.getPeers().get(peerIndex).setInterestMe(false);
+                        guestPeer.setInterestMe(false);
                         break;
 
                     case HAVE:
@@ -64,21 +68,21 @@ public class PeerThread implements Runnable {
                         // if interested in this peer and not been choked by this peer, send request.
                         if (peerProcess.config.getMyBitField().isInterested(temp.getIndex())) {
                             //if I am interested in this piece, set flag, send interest message.
-                            peerProcess.config.getPeers().get(peerIndex).setInterested(true);
+                            guestPeer.setInterested(true);
                             ActualMsg interest = new ActualMsg(ActualMsg.MsgType.INTERESTED);
-                            interest.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
-                            peerProcess.config.getPeers().get(peerIndex).getBitField().setPiece(temp.getIndex());
-                            peerProcess.config.getPeers().get(peerIndex).getBitField().setInterest(temp.getIndex());
+                            interest.sendActualMsg(guestPeer.getSocket().getOutputStream());
+                            guestPeer.getBitField().setPiece(temp.getIndex());
+                            guestPeer.getBitField().setInterest(temp.getIndex());
 
-                            if (!peerProcess.config.getPeers().get(peerIndex).getChokeMe()) {
-                                ActualMsg have_request = new ActualMsg(ActualMsg.MsgType.REQUEST, peerProcess.config.getPeers().get(peerIndex).getBitField().randomSelectIndex(random));
-                                have_request.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
+                            if (!guestPeer.getChokeMe()) {
+                                ActualMsg have_request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
+                                have_request.sendActualMsg(guestPeer.getSocket().getOutputStream());
                             }
                         } else {
-                            peerProcess.config.getPeers().get(peerIndex).setInterested(false);
+                            guestPeer.setInterested(false);
                             ActualMsg notInterest = new ActualMsg(ActualMsg.MsgType.NOTINTERESTED);
-                            notInterest.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
-                            peerProcess.config.getPeers().get(peerIndex).getBitField().setPiece(temp.getIndex());
+                            notInterest.sendActualMsg(guestPeer.getSocket().getOutputStream());
+                            guestPeer.getBitField().setPiece(temp.getIndex());
                         }
                         break;
 
@@ -88,11 +92,11 @@ public class PeerThread implements Runnable {
 
                     case REQUEST:
                         //check if this peer is choked
-                        if (!peerProcess.config.getPeers().get(peerIndex).getChoked()) {
+                        if (!guestPeer.getChoked()) {
                             //if not choked, then send the piece which is requested.
                             ActualMsg piece = new ActualMsg(peerProcess.fileManager.readMsg(temp.getIndex()));
-                            piece.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
-                            peerProcess.config.getPeers().get(peerIndex).incTransNumber();
+                            piece.sendActualMsg(guestPeer.getSocket().getOutputStream());
+                            guestPeer.incTransNumber();
                         } else {
                             //if choked, just ignore this request.
                             break;
@@ -111,16 +115,22 @@ public class PeerThread implements Runnable {
                         peerProcess.config.getMyBitField().setPiece(temp.getIndex());
 
                         ActualMsg reply_have = new ActualMsg(ActualMsg.MsgType.HAVE, temp.getIndex());
-                        for (int i = 0; i < peerProcess.config.getPeers().size(); i++) {
-                            peerProcess.config.getPeers().get(i).getBitField().removeInterest(temp.getIndex());
-                            peerProcess.config.getPeers().get(i).setInterested(peerProcess.config.getPeers().get(i).getBitField().isInterested());
-                            reply_have.sendActualMsg(peerProcess.config.getPeers().get(i).getSocket().getOutputStream());
+                        for (Config.Peer peer:peerArrayList) {
+                            peer.getBitField().removeInterest(temp.getIndex());
+                            peer.setInterested(peer.getBitField().isInterested());
+                            reply_have.sendActualMsg(peer.getSocket().getOutputStream());
                         }
 
-                        if (peerProcess.config.getPeers().get(peerIndex).getInterested() && peerProcess.config.getPeers().get(peerIndex).getChoked()) {
+                        /*for (int i = 0; i < peerArrayList.size(); i++) {
+                            peerArrayList.get(i).getBitField().removeInterest(temp.getIndex());
+                            peerArrayList.get(i).setInterested(peerArrayList.get(i).getBitField().isInterested());
+                            reply_have.sendActualMsg(peerArrayList.get(i).getSocket().getOutputStream());
+                        }*/
+
+                        if (guestPeer.getInterested() && guestPeer.getChoked()) {
                             //if still interest this peer and not been choked
-                            ActualMsg reply_request = new ActualMsg(ActualMsg.MsgType.REQUEST, peerProcess.config.getPeers().get(peerIndex).getBitField().randomSelectIndex(random));
-                            reply_request.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
+                            ActualMsg reply_request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
+                            reply_request.sendActualMsg(guestPeer.getSocket().getOutputStream());
                         }
 
                         break;
@@ -128,7 +138,7 @@ public class PeerThread implements Runnable {
 
                 if (peerProcess.config.getMyFile()) {
                     t = false;
-                    for (Config.Peer peer : peerProcess.config.getPeers()
+                    for (Config.Peer peer : peerArrayList
                             ) {
                         if (!peer.getHaveFile()) {
                             t = true;
@@ -137,7 +147,7 @@ public class PeerThread implements Runnable {
                 }
 
             }
-            peerProcess.config.getPeers().get(peerIndex).getSocket().close();
+            //guestPeer.getSocket().close();
         } catch (IOException e) {
             e.printStackTrace();
         }

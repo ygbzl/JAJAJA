@@ -18,8 +18,8 @@ public class OptNeighbor implements Runnable {
 
     OptNeighbor() {
         optInterval = peerProcess.config.getOptUnchokingInterval();
-        allPeer=peerProcess.config.getPeers();
-        curNeighbors=peerProcess.getNeighbourPeers();
+        allPeer = peerProcess.config.getPeers();
+        curNeighbors = peerProcess.getNeighbourPeers();
         lastOpt = null;
         curOpt = null;
     }
@@ -37,14 +37,14 @@ public class OptNeighbor implements Runnable {
         }
     }
 
-    public  synchronized void  choseOpe() throws IOException {
+    public synchronized void choseOpe() throws IOException {
         for (Config.Peer x : allPeer) {
             if (x.getChoked() && x.getInterestMe()) {
                 tobeChose.add(x);
             }
         }
 
-        curOpt = tobeChose.get((int)(Math.random() * tobeChose.size()));
+        curOpt = tobeChose.get((int) (Math.random() * tobeChose.size()));
         curOpt.setChoked(false);
         curOpt.setOptimisticNeighbor(true);
         ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
@@ -60,7 +60,7 @@ public class OptNeighbor implements Runnable {
             }
         }
 
-        lastOpt=curOpt;
+        lastOpt = curOpt;
 
     }
 
