@@ -16,7 +16,7 @@ public class PickPreferNeighbour implements Runnable{
          this.interval = peerProcess.config.getUnchokinInterval();
          this.number = peerProcess.config.getNumberOfPreferedNeighbors();
          this.preferedPeers = peerProcess.getNeighbourPeers();
-     }
+
 
     @Override
     public void run(){
