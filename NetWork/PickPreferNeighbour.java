@@ -23,7 +23,10 @@ public class PickPreferNeighbour implements Runnable{
         try {
             firstChoose();
             while(true){
-                choose();
+                if (peerProcess.config.getMyFile())
+                    firstChoose();
+                else
+                    choose();
                 Thread.sleep(interval * 1000);
             }
         } catch (IOException e) {
