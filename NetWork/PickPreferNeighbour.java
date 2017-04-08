@@ -42,8 +42,8 @@ public class PickPreferNeighbour implements Runnable{
         for(int i = 0;i < number;i++){
             Random random = new Random(number);
             int index = peerProcess.neighbourPeers.indexOf(random);
-            peerProcess.getNeighbourPeers().get(index).choked = false;
-            peerProcess.getNeighbourPeers().get(index).preferedNeighbor = true;
+            peerProcess.getNeighbourPeers().get(index).setChoked(false);
+            peerProcess.getNeighbourPeers().get(index).setPreferedNeighbor(true);
             peers.add(peerProcess.neighbourPeers.get(index));
 
         }
