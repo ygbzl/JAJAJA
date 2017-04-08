@@ -14,13 +14,13 @@ import static NetWork.ManageFile.*;
  */
 public class peerProcess  {
 
-    public static Config config;
+    static Config config;
     //PeerState peerState=new PeerState();
-    public static ManageFile fileManager;
-    HandShakeMsg handshake;
-    int myID;
+    static ManageFile fileManager;
+    private HandShakeMsg handshake;
+    //private int myID;
     //int guestID;
-    public static ArrayList<Config.Peer> neighbourPeers;
+    private static ArrayList<Config.Peer> neighbourPeers;
 
     /*final byte[] chokeMsg = {0,0,0,1,0};
     final byte[] unchokeMsg = {0,0,0,1,1};
@@ -31,10 +31,10 @@ public class peerProcess  {
     byte[] requstMsg = {0,0,0,5,6};*/
 
     peerProcess(int pid) throws IOException {
-        myID = pid;
-        config = new Config(myID);
+        //myID = pid;
+        config = new Config(pid);
         fileManager = new ManageFile(config);
-        handshake = new HandShakeMsg(myID);
+        handshake = new HandShakeMsg(pid);
         neighbourPeers = new ArrayList<>();
     }
     public static ArrayList<Config.Peer> getNeighbourPeers(){
@@ -77,7 +77,7 @@ public class peerProcess  {
                 bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
                 //wait for an interest message and then set the flag of this peer
                 //may add it into an interest list
-                bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+                readActualMsg(peer.getSocket().getInputStream());
                 peer.setInterestMe(true);
                 peer.setInterested(false);
             }
@@ -85,7 +85,7 @@ public class peerProcess  {
             if (peer.getHaveFile()){
                 //if this peer have whole file, read and log the bitfield message
                 //then send interest message
-                bitfieldMsg.readActualMsg(peer.getSocket().getInputStream());
+                readActualMsg(peer.getSocket().getInputStream());
                 ActualMsg interestMsg = new ActualMsg(MsgType.INTERESTED);
                 interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
                 peer.setInterestMe(false);

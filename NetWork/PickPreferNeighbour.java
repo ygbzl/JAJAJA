@@ -10,12 +10,13 @@ public class PickPreferNeighbour implements Runnable{
      private int interval;
      private ArrayList<Config.Peer> preferedPeers;
      private int number;
+     Random random = new Random(System.currentTimeMillis());
 
 
      public PickPreferNeighbour() throws IOException{
          this.interval = peerProcess.config.getUnchokinInterval();
          this.number = peerProcess.config.getNumberOfPreferedNeighbors();
-         this.preferedPeers = peerProcess.neighbourPeers;
+         this.preferedPeers = peerProcess.getNeighbourPeers();
      }
 
     @Override
@@ -29,21 +30,19 @@ public class PickPreferNeighbour implements Runnable{
                     choose();
                 Thread.sleep(interval * 1000);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
     }
 
-    public synchronized void choose() throws IOException{
+    public void choose() throws IOException{
         preferedPeers = sortPeers();
         for(Config.Peer peer : preferedPeers){
             int speed = peer.getTransNumber() / interval;
-            if(peer.getChoked() == false && peer.getPreferedNeighbor() == true){
+            if(!peer.getChoked() && peer.getPreferedNeighbor()){
                 peer.setTransRate(speed);
-            }else if(peer.getOptimisticNeighbor() == true){
+            }else if(peer.getOptimisticNeighbor()){
                 peer.setPreferedNeighbor(true);
                 peer.setTransRate(speed);
             }else{
@@ -55,9 +54,9 @@ public class PickPreferNeighbour implements Runnable{
             }
         }
         for(Config.Peer peer : peerProcess.config.getPeers()){
-            if(peer.getChoked() == false && !preferedPeers.contains(peer) && peer.getOptimisticNeighbor() == true){
-                continue;
-            }else if(peer.getChoked() == false && !preferedPeers.contains(peer) && peer.getOptimisticNeighbor() == false){
+            if(!peer.getChoked() && !preferedPeers.contains(peer) && peer.getOptimisticNeighbor()){
+                //continue;
+            }else if(!peer.getChoked() && !preferedPeers.contains(peer) && !peer.getOptimisticNeighbor()){
                 peer.setChoked(true);
                 peer.setPreferedNeighbor(false);
                 ActualMsg msg = new ActualMsg(ActualMsg.MsgType.CHOKE);
@@ -69,22 +68,21 @@ public class PickPreferNeighbour implements Runnable{
         }
     }
 
-    public synchronized void firstChoose() throws IOException{
+    public void firstChoose() throws IOException{
         //Random random = new Random(config.getNumberOfPreferedNeighbors());
         for(int i = 0;i < number;i++){
-            Random random = new Random(number);
-            int index = peerProcess.neighbourPeers.indexOf(random);
+            int index = peerProcess.getNeighbourPeers().indexOf(peerProcess.getNeighbourPeers().get(random.nextInt(peerProcess.getNeighbourPeers().size())));
             Config.Peer temp = peerProcess.getNeighbourPeers().get(index);
             temp.setChoked(false);
             temp.setPreferedNeighbor(true);
             ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
             msg.sendActualMsg(temp.getSocket().getOutputStream());
-            preferedPeers.add(peerProcess.neighbourPeers.get(index));
+            preferedPeers.add(peerProcess.getNeighbourPeers().get(index));
         }
     }
 
     public ArrayList<Config.Peer> sortPeers(){
-        PriorityQueue<Config.Peer> pq = new PriorityQueue<>(number+1, (a,b) -> a.getTransRate()-b.getTransRate());
+        PriorityQueue<Config.Peer> pq = new PriorityQueue<>(number+1, Comparator.comparingInt(Config.Peer::getTransRate));
         for (Config.Peer x : peerProcess.config.getPeers()) {
             if(pq.size()==number+1){
                 pq.poll();
@@ -92,8 +90,8 @@ public class PickPreferNeighbour implements Runnable{
             pq.offer(x);
         }
         pq.poll();
-        ArrayList<Config.Peer> res = new ArrayList<>(pq);
-        return res;
+        return new ArrayList<>(pq);
+        //return res;
     }
 
 }
