@@ -92,6 +92,7 @@ public class PeerThread implements Runnable {
                                 //if not choked, then send the piece which is requested.
                                 ActualMsg piece = new ActualMsg(peerProcess.fileManager.readMsg(temp.getIndex()));
                                 piece.sendActualMsg(peerProcess.config.getPeers().get(peerIndex).getSocket().getOutputStream());
+                                peerProcess.config.getPeers().get(peerIndex).incTransNumber();
                             } else {
                                 //if choked, just ignore this request.
                                 break;

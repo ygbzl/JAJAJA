@@ -223,6 +223,7 @@ public class Config {
                 preferedNeighbor = false;
                 optimisticNeighbor = false;
                 transRate = 0;
+                transNumber = 0;
                 address = peerInfo[1];
                 try {
                     port = Integer.parseInt(peerInfo[2]);
