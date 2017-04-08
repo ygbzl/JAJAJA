@@ -1,5 +1,6 @@
 package NetWork;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -9,43 +10,41 @@ import java.util.Random;
  */
 public class PickPreferNeighbour implements Runnable{
      private int interval;
-     private Config config;
-     private ArrayList<Config.Peer> peers;
-     private BitField bitField;
-     private boolean unchoke;
+     private ArrayList<Config.Peer> preferedPeers;
      private ActualMsg actualMsg;
-     private int pid;
-     private int number = config.getNumberOfPreferedNeighbors();
+     private int number;
 
 
-     public PickPreferNeighbour() {
-         this.interval = config.getUnchokinInterval();
-         this.peers = config.getPeers();
-         this.pid = config.getMyPid();
+     public PickPreferNeighbour() throws IOException{
+         this.interval = peerProcess.config.getUnchokinInterval();
+         this.number = peerProcess.config.getNumberOfPreferedNeighbors();
      }
 
     @Override
-    public void run() {
-         firstChoose();
-         while(true){
-           ArrayList<Config.Peer> temp = peers;
-           peers = choose(temp);
-         }
+    public void run(){
+        try {
+            firstChoose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private ArrayList<Config.Peer> choose(ArrayList<Config.Peer> neighbourPeers) {
         return null;
     }
 
-    public void firstChoose(){
+    public void firstChoose() throws IOException{
         //Random random = new Random(config.getNumberOfPreferedNeighbors());
         for(int i = 0;i < number;i++){
             Random random = new Random(number);
             int index = peerProcess.neighbourPeers.indexOf(random);
-            peerProcess.getNeighbourPeers().get(index).setChoked(false);
-            peerProcess.getNeighbourPeers().get(index).setPreferedNeighbor(true);
-            peers.add(peerProcess.neighbourPeers.get(index));
-
+            Config.Peer temp = peerProcess.getNeighbourPeers().get(index);
+            temp.setChoked(false);
+            temp.setPreferedNeighbor(true);
+            ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
+            msg.sendActualMsg(temp.getSocket().getOutputStream());
+            preferedPeers.add(peerProcess.neighbourPeers.get(index));
         }
     }
 
