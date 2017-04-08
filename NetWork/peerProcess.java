@@ -119,6 +119,7 @@ public class peerProcess  {
 
     private void sendHandShake(Config.Peer peer) throws Exception {
         peer.setSocket();
+        peer.getSocket();
         handshake.sendMsg(peer.getSocket().getOutputStream());
         if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()){
             throw new Exception("Error occurs on hand shaking");
