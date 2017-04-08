@@ -11,7 +11,7 @@ import java.util.Random;
 public class OptNeighbor implements Runnable {
     final int optInterval;
     ArrayList<Config.Peer> allPeer;
-    ArrayList<Config.Peer> curNeighbors;
+   // ArrayList<Config.Peer> curNeighbors;
     ArrayList<Config.Peer> tobeChose;
     Config.Peer lastOpt;
     Config.Peer curOpt;
@@ -19,7 +19,7 @@ public class OptNeighbor implements Runnable {
     OptNeighbor() {
         optInterval = peerProcess.config.getOptUnchokingInterval();
         allPeer=peerProcess.config.getPeers();
-        curNeighbors=peerProcess.getNeighbourPeers();
+      //  curNeighbors=peerProcess.getNeighbourPeers();
         lastOpt = null;
         curOpt = null;
     }
