@@ -55,7 +55,7 @@ public class BitField {
         }
     }
 
-    public boolean compareBitField(BitField guestBitfield) {
+    boolean compareBitField(BitField guestBitfield) {
         //return whether is interested.
         //also update the interest List.
         for (int i : interestList
@@ -67,13 +67,13 @@ public class BitField {
         return false;
     }
 
-    public boolean isInterested(int index){
+    boolean isInterested(int index){
         //check if interested in the index piece
         //
         return interestList.contains(index);
     }
 
-    public boolean isInterested(){
+    boolean isInterested(){
         return !interestList.isEmpty();
     }
 
@@ -82,58 +82,58 @@ public class BitField {
 
     }*/
 
-    public synchronized void removeInterest(int index){
+    synchronized void removeInterest(int index){
         if (interestList.contains(index)) {
             interestList.remove(interestList.indexOf(index));
         }
     }
 
-    public synchronized void setInterest(int intex){
+    synchronized void setInterest(int intex){
         if(!isInterested(intex)) {
             interestList.add(intex);
         }
     }
 
-    public synchronized int randomSelectIndex(Random r){
+    synchronized int randomSelectIndex(Random r){
 
         return interestList.get(r.nextInt(interestList.size()));
 
     }
 
-    public synchronized void setPiece(int index) {
+    synchronized void setPiece(int index) {
         if (index < data.length) {
             data[index] = 1;
             bdata[index] = true;
         }
 
-        for (int i = 0; i < bdata.length; i++) {
-            if (!bdata[i]){
+        for (Boolean aBdata : bdata) {
+            if (!aBdata) {
                 return;
             }
         }
         haveFile = true;
     }
 
-    public synchronized void removePiece(int index){
+    synchronized void removePiece(int index){
         if (index < data.length) {
             data[index] = 0;
             bdata[index] = false;
         }
     }
 
-    public Boolean getHaveFile() {
+    Boolean getHaveFile() {
         return haveFile;
     }
 
-    public byte[] getData() {
+    byte[] getData() {
         return data;
     }
 
-    public Boolean[] getBdata() {
+    Boolean[] getBdata() {
         return bdata;
     }
 
-    public int getLength(){
+    int getLength(){
         return data.length;
     }
 }

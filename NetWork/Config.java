@@ -9,23 +9,23 @@ import java.util.HashMap;
  * Created by zhupd on 2/19/2017.
  */
 public class Config {
-    int NumberOfPreferedNeighbors;
-    int UnchokinInterval;
-    int OptUnchokingInterval;
-    String FileName;
-    int FileSize;
-    int PieceSize;
+    private int NumberOfPreferedNeighbors;
+    private int UnchokinInterval;
+    private int OptUnchokingInterval;
+    private String FileName;
+    private int FileSize;
+    private int PieceSize;
     //HashMap<Integer, Peer> peers;
-    ArrayList<Peer> peers;
-    int pieceNum;
-    int remainPieceSize;
+    private ArrayList<Peer> peers;
+    private int pieceNum;
+    private int remainPieceSize;
 
-    int myPid;
-    String myAddr;
-    int myPort;
-    Boolean myFile;
-    BitField myBitField;
-    int myIndex;
+    private int myPid;
+    private String myAddr;
+    private int myPort;
+    private Boolean myFile;
+    private BitField myBitField;
+    private int myIndex;
 
     Config(int pid) throws IOException {
         myPid = pid;
@@ -74,10 +74,10 @@ public class Config {
 
         PieceSize =
                 Integer.parseInt(br.readLine().split(" ")[1]);
-        pieceNum = FileSize/PieceSize;
+        pieceNum = FileSize / PieceSize;
 
-        if (FileSize%PieceSize != 0) {
-            remainPieceSize = FileSize%PieceSize;
+        if (FileSize % PieceSize != 0) {
+            remainPieceSize = FileSize % PieceSize;
             pieceNum++;
         } else {
             remainPieceSize = PieceSize;
@@ -123,71 +123,68 @@ public class Config {
         }
     }
 
-    public int getNumberOfPreferedNeighbors() {
+    int getNumberOfPreferedNeighbors() {
         return NumberOfPreferedNeighbors;
     }
 
-    public int getUnchokinInterval() {
+    int getUnchokinInterval() {
         return UnchokinInterval;
     }
 
-    public int getOptUnchokingInterval() {
+    int getOptUnchokingInterval() {
         return OptUnchokingInterval;
     }
 
-    public String getFileName() {
+    String getFileName() {
         return FileName;
     }
 
-    public int getFileSize() {
+    int getFileSize() {
         return FileSize;
     }
 
-    public int getPieceSize() {
+    int getPieceSize() {
         return PieceSize;
     }
 
-    /*public ArrayList<Peer> getPeers() {
-        return peers;
-    }*/
 
-    public void setMyFile(Boolean myFile) {
+    void setMyFile(Boolean myFile) {
         this.myFile = myFile;
     }
 
-    public int getPieceNum() {
+    int getPieceNum() {
         return pieceNum;
     }
 
-    public int getRemainPieceSize() {
+    int getRemainPieceSize() {
         return remainPieceSize;
     }
 
-    public int getMyPid() {
+    int getMyPid() {
         return myPid;
     }
 
-    public String getMyAddr() {
+    String getMyAddr() {
         return myAddr;
     }
 
-    public int getMyPort() {
+    int getMyPort() {
         return myPort;
     }
 
-    public Boolean getMyFile() {
+    Boolean getMyFile() {
         return myFile;
     }
 
-    public BitField getMyBitField() {
+    BitField getMyBitField() {
         return myBitField;
     }
 
-    public int getMyIndex() {
+    int getMyIndex() {
         return myIndex;
     }
 
-    public ArrayList<Peer> getPeers() {
+    ArrayList<Peer> getPeers() {
         return peers;
     }
 
@@ -207,7 +204,7 @@ public class Config {
         private int port;
         private Socket socket;
 
-        public Peer(String[] peerInfo) {
+        Peer(String[] peerInfo) {
             if (peerInfo.length == 4) {
                 try {
                     PID = Integer.parseInt(peerInfo[0]);
@@ -261,116 +258,116 @@ public class Config {
             }
         }
 
-        public int getTransNumber() {
+        int getTransNumber() {
             return transNumber;
         }
 
-        public void setTransNumber(int transNumber) {
+        void setTransNumber(int transNumber) {
             this.transNumber = transNumber;
         }
 
-        public void incTransNumber() {
+        void incTransNumber() {
             this.transNumber++;
         }
 
-        public int getPID() {
+        int getPID() {
             return PID;
         }
 
-        public void setPID(int PID) {
+        void setPID(int PID) {
             this.PID = PID;
         }
 
-        public BitField getBitField() {
+        BitField getBitField() {
             return bitField;
         }
 
-        public void setBitField(BitField bitField) {
+        void setBitField(BitField bitField) {
             this.bitField = bitField;
         }
 
-        public Boolean getChokeMe() {
+        Boolean getChokeMe() {
             return chokeMe;
         }
 
-        public void setChokeMe(Boolean chokeMe) {
+        void setChokeMe(Boolean chokeMe) {
             this.chokeMe = chokeMe;
         }
 
-        public Boolean getChoked() {
+        Boolean getChoked() {
             return choked;
         }
 
-        public void setChoked(Boolean choked) {
+        void setChoked(Boolean choked) {
             this.choked = choked;
         }
 
-        public Boolean getInterestMe() {
+        Boolean getInterestMe() {
             return interestMe;
         }
 
-        public void setInterestMe(Boolean interestMe) {
+        void setInterestMe(Boolean interestMe) {
             this.interestMe = interestMe;
         }
 
-        public Boolean getInterested() {
+        Boolean getInterested() {
             return interested;
         }
 
-        public void setInterested(Boolean interested) {
+        void setInterested(Boolean interested) {
             this.interested = interested;
         }
 
-        public int getTransRate() {
+        int getTransRate() {
             return transRate;
         }
 
-        public void setTransRate(int transRate) {
+        void setTransRate(int transRate) {
             this.transRate = transRate;
         }
 
-        public Boolean getHaveFile() {
+        Boolean getHaveFile() {
             return haveFile;
         }
 
-        public void setHaveFile(Boolean haveFile) {
+        void setHaveFile(Boolean haveFile) {
             this.haveFile = haveFile;
         }
 
-        public Socket getSocket() {
+        Socket getSocket() {
             return socket;
         }
 
-        public void setSocket() throws IOException {
-            socket = new Socket(address,port);
+        void setSocket() throws IOException {
+            socket = new Socket(address, port);
 
         }
 
-        public Boolean getPreferedNeighbor() {
+        Boolean getPreferedNeighbor() {
             return preferedNeighbor;
         }
 
-        public void setPreferedNeighbor(Boolean preferedNeighbor) {
+        void setPreferedNeighbor(Boolean preferedNeighbor) {
             this.preferedNeighbor = preferedNeighbor;
         }
 
-        public Boolean getOptimisticNeighbor() {
+        Boolean getOptimisticNeighbor() {
             return optimisticNeighbor;
         }
 
-        public void setOptimisticNeighbor(Boolean optimisticNeighbor) {
+        void setOptimisticNeighbor(Boolean optimisticNeighbor) {
             this.optimisticNeighbor = optimisticNeighbor;
         }
 
-        public void setSocket(Socket socket) {
+        void setSocket(Socket socket) {
             this.socket = socket;
         }
 
-        public String getAddress() {
+        String getAddress() {
             return address;
         }
 
-        public int getPort() {
+        int getPort() {
             return port;
         }
     }
