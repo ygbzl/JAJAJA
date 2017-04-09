@@ -8,6 +8,4 @@ public class Test {
         peerProcess p = new peerProcess(1001);
         p.run();
     }
-
-    dd
 }
