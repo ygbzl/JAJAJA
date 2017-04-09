@@ -23,12 +23,22 @@ public class PickPreferNeighbour implements Runnable{
     public void run(){
         try {
             firstChoose();
-            while(true){
+            boolean t = true;
+            while(t){
                 if (peerProcess.config.getMyFile())
                     firstChoose();
                 else
                     choose();
                 Thread.sleep(interval * 1000);
+                if (peerProcess.config.getMyFile()) {
+                    t = false;
+                    for (Config.Peer peer : peerProcess.config.getPeers()
+                            ) {
+                        if (!peer.getHaveFile()) {
+                            t = true;
+                        }
+                    }
+                }
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

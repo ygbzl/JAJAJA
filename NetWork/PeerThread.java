@@ -35,7 +35,7 @@ public class PeerThread implements Runnable {
         //peerProcess.fileManager;
 
         //I don't have file
-        Boolean t = true;
+        boolean t = true;
         try {
             while (t) {
                 ActualMsg temp = ActualMsg.readActualMsg(guestPeer.getSocket().getInputStream());

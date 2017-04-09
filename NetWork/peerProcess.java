@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.*;
 
 import static NetWork.ActualMsg.*;
 import static NetWork.ConstantMethod.*;
@@ -12,7 +13,7 @@ import static NetWork.ManageFile.*;
 /**
  * Created by zhupd on 2/18/2017.
  */
-public class peerProcess  {
+public class peerProcess {
 
     static Config config;
     //PeerState peerState=new PeerState();
@@ -37,10 +38,12 @@ public class peerProcess  {
         handshake = new HandShakeMsg(pid);
         neighbourPeers = new ArrayList<>();
     }
-    public static ArrayList<Config.Peer> getNeighbourPeers(){
+
+    public static ArrayList<Config.Peer> getNeighbourPeers() {
         return neighbourPeers;
     }
-    public static synchronized void setNeighbourPeers(ArrayList<Config.Peer> neighbour){
+
+    public static synchronized void setNeighbourPeers(ArrayList<Config.Peer> neighbour) {
         neighbourPeers = neighbour;
     }
 
@@ -48,7 +51,6 @@ public class peerProcess  {
      * inputstream, read by fixed byte, first read message length,
      * then message type
      * then payload(defined by length)
-     *
      */
     void run() throws Exception {
         //PeerInfo peer = config.peerInfo.get(guestID);
@@ -68,8 +70,8 @@ public class peerProcess  {
 
         // send bitfield message and interest message
         // initialize the interest flags
-        for (Config.Peer peer: config.getPeers()
-             ) {
+        for (Config.Peer peer : config.getPeers()
+                ) {
             ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
 
             if (config.getMyFile()) {
@@ -82,7 +84,7 @@ public class peerProcess  {
                 peer.setInterested(false);
             }
 
-            if (peer.getHaveFile()){
+            if (peer.getHaveFile()) {
                 //if this peer have whole file, read and log the bitfield message
                 //then send interest message
                 readActualMsg(peer.getSocket().getInputStream());
@@ -94,10 +96,15 @@ public class peerProcess  {
             }
         }
         //start peerThread here
-
+        ExecutorService peerThreadPool = Executors.newFixedThreadPool(config.getPeers().size());
+        for (Config.Peer peers : config.getPeers()) {
+            peerThreadPool.submit(new PeerThread(peers));
+        }
 
         //start optimistic peer unchoke thread and prefered peers unchoke thread here
-
+        ExecutorService specialNeighbourSelector = Executors.newFixedThreadPool(2);
+        specialNeighbourSelector.submit(new OptNeighbor());
+        specialNeighbourSelector.submit(new PickPreferNeighbour());
 
         //when finished download, thread exit
 
@@ -105,7 +112,7 @@ public class peerProcess  {
         //close all Sockets and files
         //server socket has closed after hand shake.
         fileManager.closeManageFile();
-        for (Config.Peer peer: config.getPeers()) {
+        for (Config.Peer peer : config.getPeers()) {
             peer.getSocket().close();
         }
 
@@ -114,7 +121,7 @@ public class peerProcess  {
     private void sendHandShake(Config.Peer peer) throws Exception {
         peer.setSocket();
         handshake.sendMsg(peer.getSocket().getOutputStream());
-        if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()){
+        if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()) {
             throw new Exception("Error occurs on hand shaking");
         }
     }

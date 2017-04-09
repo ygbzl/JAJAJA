@@ -26,11 +26,21 @@ public class OptNeighbor implements Runnable {
 
     @Override
     public void run() {
-
+        boolean t = true;
         try {
-            while (true) {
+            while (t) {
                 choseOpe();
                 Thread.sleep(optInterval * 1000);
+
+                if (peerProcess.config.getMyFile()) {
+                    t = false;
+                    for (Config.Peer peer : allPeer
+                            ) {
+                        if (!peer.getHaveFile()) {
+                            t = true;
+                        }
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
