@@ -68,6 +68,8 @@ public class OptNeighbor implements Runnable {
                 ActualMsg ckMst = new ActualMsg(ActualMsg.MsgType.CHOKE);
                 ckMst.sendActualMsg(lastOpt.getSocket().getOutputStream());
             }
+            lastOpt.setTransRate(lastOpt.getTransNumber() / optInterval);
+            lastOpt.setTransNumber(0);
         }
 
         lastOpt = curOpt;
