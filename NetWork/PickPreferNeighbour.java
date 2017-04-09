@@ -26,7 +26,7 @@ public class PickPreferNeighbour implements Runnable{
             boolean t = true;
             while(t){
                 if (peerProcess.config.getMyFile())
-                    firstChoose();
+                firstChoose();
                 else
                     choose();
                 Thread.sleep(interval * 1000);

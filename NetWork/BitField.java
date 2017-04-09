@@ -22,6 +22,7 @@ public class BitField {
         //this constructor is for peers.
         this.haveFile = haveFile;
         data = new byte[pieceNum];
+        bdata = new Boolean[pieceNum];
         interestList = new ArrayList<>();
         if (haveFile) {
             for (int i = 0; i < data.length; i++) {
@@ -40,6 +41,7 @@ public class BitField {
         //this constructor is for myself, the value of isMe doesn't matter.
         this.haveFile = haveFile;
         data = new byte[pieceNum];
+        bdata = new Boolean[pieceNum];
         interestList = new ArrayList<>();
         if (haveFile) {
             for (int i = 0; i < data.length; i++) {

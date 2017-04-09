@@ -105,7 +105,6 @@ public class peerProcess {
         ExecutorService specialNeighbourSelector = Executors.newFixedThreadPool(2);
         specialNeighbourSelector.submit(new OptNeighbor());
         specialNeighbourSelector.submit(new PickPreferNeighbour());
-
         //when finished download, thread exit
 
 
