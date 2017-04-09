@@ -29,6 +29,7 @@ public class Config {
 
     Config(int pid) throws IOException {
         myPid = pid;
+        peers = new ArrayList<>();
         readCommon();
         readPeerInfo(myPid);
     }
@@ -61,7 +62,7 @@ public class Config {
                 Integer.parseInt(br.readLine().split(" ")[0]);
 
         UnchokinInterval =
-                    Integer.parseInt(br.readLine().split(" ")[0]);
+                Integer.parseInt(br.readLine().split(" ")[0]);
 
         OptUnchokingInterval =
                 Integer.parseInt(br.readLine().split(" ")[0]);
@@ -98,7 +99,7 @@ public class Config {
         BufferedReader br = new BufferedReader(reader);
         String temp = br.readLine();
         int myIndex = 0;
-        while (!temp.isEmpty()) {
+        while (temp != null) {
             String[] str = temp.split(" ");
             int pidTemp = 0;
             try {
@@ -111,7 +112,7 @@ public class Config {
             if (pid != pidTemp) {
                 Peer ptemp = new Peer(str);
                 peers.add(ptemp);
-                temp = br.readLine();
+                //temp = br.readLine();
             } else {
                 myAddr = str[1];
                 myPort = Integer.parseInt(str[2]);
@@ -120,6 +121,7 @@ public class Config {
                 this.myIndex = myIndex;
             }
             myIndex++;
+            temp = br.readLine();
         }
     }
 
@@ -212,7 +214,7 @@ public class Config {
                     System.out.print("invalid pid." + peerInfo[0]);
                     e.printStackTrace();
                 }
-                bitField = new BitField(new byte[0]);
+
                 chokeMe = true;
                 choked = true;
                 interestMe = false;
@@ -242,6 +244,7 @@ public class Config {
                     e.printStackTrace();
                 }
                 this.haveFile = haveFile == 1;
+                bitField = new BitField(this.haveFile, pieceNum);
                 /*if (haveFile == 1){
                     this.haveFile = true;
                 } else if (haveFile == 0) {
@@ -254,7 +257,6 @@ public class Config {
                         e.printStackTrace();
                     }
                 }*/
-                bitField = new BitField(this.haveFile, pieceNum);
             }
         }
 
