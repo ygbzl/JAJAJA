@@ -37,6 +37,13 @@ public class ManageFile {
         }
 
         file = new RandomAccessFile(directory + config.getFileName(), "rw");
+        if (!config.getMyFile()){
+            try {
+                file.setLength(config.getFileSize());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }
