@@ -35,7 +35,7 @@ public class Logger {
     }
 
     public synchronized void print(String log) throws IOException {
-        log += "/n";
+        log += "\n";
         if (flag) {
             System.out.println(log);
 

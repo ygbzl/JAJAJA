@@ -129,6 +129,8 @@ public class peerProcess {
             }
             logger.loggerOf();
             serverSocket.close();
+            System.out.println("dong");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
