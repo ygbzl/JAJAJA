@@ -154,7 +154,7 @@ public class PeerThread implements Runnable {
                         break;
                 }
 
-                if (peerProcess.config.getMyFile()) {
+                if (peerProcess.config.getMyBitField().getHaveFile()) {
                     t = false;
                     for (Config.Peer peer : peerArrayList
                             ) {
