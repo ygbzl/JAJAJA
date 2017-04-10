@@ -62,22 +62,22 @@ public class Config {
 
 
         NumberOfPreferedNeighbors =
-                Integer.parseInt(br.readLine().split(" ")[0]);
+                Integer.parseInt(br.readLine().split(" ")[1]);
 
         UnchokinInterval =
-                Integer.parseInt(br.readLine().split(" ")[0]);
+                Integer.parseInt(br.readLine().split(" ")[1]);
 
         OptUnchokingInterval =
-                Integer.parseInt(br.readLine().split(" ")[0]);
+                Integer.parseInt(br.readLine().split(" ")[1]);
 
         FileName =
                 br.readLine().split(" ")[0];
 
         FileSize =
-                Integer.parseInt(br.readLine().split(" ")[0]);
+                Integer.parseInt(br.readLine().split(" ")[1]);
 
         PieceSize =
-                Integer.parseInt(br.readLine().split(" ")[0]);
+                Integer.parseInt(br.readLine().split(" ")[1]);
         pieceNum = FileSize / PieceSize;
 
         if (FileSize % PieceSize != 0) {

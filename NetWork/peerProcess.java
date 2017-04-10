@@ -53,6 +53,17 @@ public class peerProcess {
      * then message type
      * then payload(defined by length)
      */
+
+    public static void main(String[] args) throws Exception {
+        peerProcess p = new peerProcess(Integer.parseInt(args[0]));
+
+        p.run();
+        /*byte[] msgLength = new byte[] {0,0,0,1};
+        byte msgType = 1;
+        byte[] tosend = ConstantMethod.mergeBytes(msgLength, new byte[]{msgType});
+        tosend = ConstantMethod.mergeBytes(tosend, new byte[0]);*/
+    }
+
     void run() {
         //PeerInfo peer = config.peerInfo.get(guestID);
         //Send handshake message to the peers whose pid less than me
