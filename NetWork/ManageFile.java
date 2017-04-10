@@ -78,7 +78,7 @@ public class ManageFile {
         int offset = filePiece.getPieceIndex()*config.getPieceSize();
         byte[] data = filePiece.getPiecesArray();
         file.seek(offset);
-        file.write(data, offset, data.length);
+        file.write(data);
     }
 
     public void closeManageFile () throws IOException {
