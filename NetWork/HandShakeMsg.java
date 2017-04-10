@@ -65,7 +65,7 @@ public class HandShakeMsg {
         if (!header.equals(HEADER) || !zeroBit.equals(ZEROBIT)) {
             throw new IOException("not a handshake message");
         }
-
+        System.out.println("awerwfeerre");
         return ConstantMethod.bytesToInt(peerID);
 
     } //read handshake
