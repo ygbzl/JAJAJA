@@ -67,7 +67,7 @@ public class peerProcess {
                 for (int i = config.getMyIndex(); i < config.getPeers().size(); i++) {
                     waitHandshake(config.getPeers().get(i), serverSocket);
                 }
-                serverSocket.close();
+                //serverSocket.close();
             }
 
             // send bitfield message and interest message
