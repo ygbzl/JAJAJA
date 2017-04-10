@@ -111,11 +111,11 @@ public class Logger {
         print(log);
     }
 
-    public void piece(int id, int number) throws IOException {
+    public void piece(int id, int number, int index) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
         String log = time + ": Peer" + hostPeerID + " has downloaded the piece "
-                + number + " from " + remoteID + ".";
+                + index + " from " + remoteID + "." + " Now the number of pieces it has is " + number +".";
         print(log);
     }
 
