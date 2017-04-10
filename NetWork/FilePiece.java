@@ -11,10 +11,18 @@ public class FilePiece {
     private final int pieceIndex;
     private final byte[] piecesArray;
 
-    public FilePiece(ActualMsg actualMsg){
-        this.pieceIndex = actualMsg.getIndex();
-        this.piecesArray = actualMsg.msgLength;
+    public FilePiece(ActualMsg actualMsg) {
+        byte[] indexTemp = new byte[4];
+        for (int i = 0; i < 4; i++) {
+            indexTemp[i] = actualMsg.msgPaylod[i];
+        }
+        pieceIndex = ConstantMethod.bytesToInt(indexTemp);
+        piecesArray = new byte[actualMsg.msgPaylod.length - 4];
+        for (int i = 4; i < actualMsg.msgPaylod.length; i++) {
+            piecesArray[i] = actualMsg.msgPaylod[i];
+        }
     }
+
     public FilePiece(int pieceIndex, byte[] piecesArray) {
         this.pieceIndex = pieceIndex;
         this.piecesArray = piecesArray;
