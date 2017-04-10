@@ -161,10 +161,13 @@ public class PeerThread implements Runnable {
                         if (!peer.getHaveFile()) {
                             t = true;
                         }
+
                     }
                 }
 
             }
+
+            peerProcess.config.setMyFile(true);
             //guestPeer.getSocket().close();
         } catch (IOException e) {
             e.printStackTrace();
