@@ -19,7 +19,7 @@ public class FilePiece {
         pieceIndex = ConstantMethod.bytesToInt(indexTemp);
         piecesArray = new byte[actualMsg.msgPaylod.length - 4];
         for (int i = 4; i < actualMsg.msgPaylod.length; i++) {
-            piecesArray[i] = actualMsg.msgPaylod[i];
+            piecesArray[i - 4] = actualMsg.msgPaylod[i];
         }
     }
 
