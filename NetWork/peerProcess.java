@@ -116,6 +116,7 @@ public class peerProcess {
             try {
                 peerThreadPool.shutdownNow();
                 specialNeighbourSelector.shutdownNow();
+                System.out.println("thead term");
             } catch (Exception e) {
                 e.printStackTrace();
             }

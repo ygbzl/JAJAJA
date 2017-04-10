@@ -13,7 +13,7 @@ public class Logger {
     int peerID;
     BufferedWriter out;
     String hostPeerID;
-    boolean flag=true;//system out
+    boolean flag=false;//system out
     FileWriter temp;
     
     Logger(Config config) throws FileNotFoundException {
