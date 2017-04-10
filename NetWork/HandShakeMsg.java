@@ -36,9 +36,11 @@ public class HandShakeMsg {
         byte[] header = new byte[18];
         byte[] zeroBit = new byte[10];
         byte[] peerID = new byte[4];
+
         /*io.read(header);
         io.read(zeroBit);
         io.read(peerID);*/
+
         for (int i = 0; i <18 ; i++) {
             header[i] = in.nextByte();
         }
