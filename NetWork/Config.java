@@ -71,7 +71,7 @@ public class Config {
                 Integer.parseInt(br.readLine().split(" ")[1]);
 
         FileName =
-                br.readLine().split(" ")[0];
+                br.readLine().split(" ")[1];
 
         FileSize =
                 Integer.parseInt(br.readLine().split(" ")[1]);
