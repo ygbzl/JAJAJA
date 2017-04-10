@@ -126,6 +126,7 @@ public class peerProcess {
             for (Config.Peer peer : config.getPeers()) {
                 peer.getSocket().close();
             }
+            logger.loggerOf();
             serverSocket.close();
         } catch (Exception e) {
             e.printStackTrace();
