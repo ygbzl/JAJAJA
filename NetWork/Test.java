@@ -5,8 +5,8 @@ package NetWork;
  */
 public class Test {
     public static void main(String[] args) throws Exception {
-        int pid = Integer.parseInt(args[0]);
-        peerProcess p = new peerProcess(pid);
+
+        peerProcess p = new peerProcess(1001);
         p.run();
     }
 }
