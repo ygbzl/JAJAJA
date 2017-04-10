@@ -53,6 +53,33 @@ public class ActualMsg {
         this.msgLength = msgLength;
         this.msgType = msgType;
         this.msgPaylod = msgPaylod;
+        switch (ConstantMethod.bytesToInt(new byte[] {0,0,0,msgType}))
+        {
+            case 0:
+                type = MsgType.CHOKE;
+                break;
+            case 1:
+                type = MsgType.UNCHOKE;
+                break;
+            case 2:
+                type = MsgType.INTERESTED;
+                break;
+            case 3:
+                type = MsgType.NOTINTERESTED;
+                break;
+            case 4:
+                type = MsgType.HAVE;
+                break;
+            case 5:
+                type = MsgType.BITFIELD;
+                break;
+            case 6:
+                type = MsgType.REQUEST;
+                break;
+            case 7:
+                type = MsgType.PIECE;
+                break;
+        };
         //split msg[]
     }
 
@@ -137,7 +164,7 @@ public class ActualMsg {
         byte[] msgPayLoad = new byte[length];
         totalBytesReceived = 0;
         while (totalBytesReceived < length - 1) {
-            bytesReceived = in.read(msgPayLoad, totalBytesReceived, length - 1 - totalBytesReceived);
+            bytesReceived = in.read(msgPayLoad, totalBytesReceived, length - totalBytesReceived);
             totalBytesReceived += bytesReceived;
         }
 
