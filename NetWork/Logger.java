@@ -13,7 +13,7 @@ public class Logger {
     int peerID;
     BufferedWriter out;
     String hostPeerID;
-    boolean flag=false;//system out
+    boolean flag=true;//system out
     FileWriter temp;
     
     Logger(Config config) throws FileNotFoundException {
@@ -61,7 +61,7 @@ public class Logger {
         }
         ids = ids.substring(0, ids.length() - 1);
         String time= LocalTime.now().toString();
-        String log = time + ": Peer" + hostPeerID + " has the preferred neighbors "
+        String log = time + ": Peer " + hostPeerID + " has the preferred neighbors "
                 + ids+ ".";
         print(log);
 
@@ -70,7 +70,7 @@ public class Logger {
     public void changeOpt(int id) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
-        String log = time + ": Peer" + hostPeerID + " has the optimistically unchoked neighbor "
+        String log = time + ": Peer " + hostPeerID + " has the optimistically unchoked neighbor "
                 + remoteID+ ".";
         print(log);
     }
@@ -78,7 +78,7 @@ public class Logger {
     public void unchoking(int id) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
-        String log = time + ": Peer" + hostPeerID + " is unchoked by "
+        String log = time + ": Peer " + hostPeerID + " is unchoked by "
                 + remoteID+ ".";
         print(log);
 
@@ -87,7 +87,7 @@ public class Logger {
     public void choking(int id) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
-        String log = time + ": Peer" + hostPeerID + " is choked by "
+        String log = time + ": Peer " + hostPeerID + " is choked by "
                 + remoteID+ ".";
         print(log);
     }
@@ -95,7 +95,7 @@ public class Logger {
     public void have(int id, int pieceIndex) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
-        String log = time + ": Peer" + hostPeerID + " received the ‘have’ message from "
+        String log = time + ": Peer " + hostPeerID + " received the ‘have’ message from "
                 + remoteID + " for the piece " + pieceIndex + ".";
         print(log);
     }
@@ -103,7 +103,7 @@ public class Logger {
     public void interested(int id) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
-        String log = time + ": Peer" + hostPeerID + " received the ‘interested’ message from "
+        String log = time + ": Peer " + hostPeerID + " received the ‘interested’ message from "
                 + remoteID+ ".";
         print(log);
     }
@@ -111,7 +111,7 @@ public class Logger {
     public void notInterested(int id) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
-        String log = time + ": Peer" + hostPeerID + " received the ‘not interested’ message from "
+        String log = time + ": Peer " + hostPeerID + " received the ‘not interested’ message from "
                 + remoteID+ ".";
         print(log);
     }
@@ -119,14 +119,14 @@ public class Logger {
     public void piece(int id, int number, int index) throws IOException {
         String time= LocalTime.now().toString();
         String remoteID = id + "";
-        String log = time + ": Peer" + hostPeerID + " has downloaded the piece "
+        String log = time + ": Peer " + hostPeerID + " has downloaded the piece "
                 + index + " from " + remoteID + "." + " Now the number of pieces it has is " + number +".";
         print(log);
     }
 
     public void completion() throws IOException {
         String time= LocalTime.now().toString();
-        String log = time + ": Peer" + hostPeerID + "has downloaded the complete file.";
+        String log = time + ": Peer " + hostPeerID + "has downloaded the complete file.";
         print(log);
     }
 
