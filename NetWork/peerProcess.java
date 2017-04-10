@@ -133,7 +133,8 @@ public class peerProcess {
     }
 
     private void waitHandshake(Config.Peer peer, ServerSocket serverSocket) throws Exception {
-        peer.setSocket(serverSocket.accept());
+        while(!peer.setSocket(serverSocket.accept()))
+
         handshake.readMsg(peer.getSocket().getInputStream());
         handshake.sendMsg(peer.getSocket().getOutputStream());
     }

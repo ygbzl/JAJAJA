@@ -361,8 +361,14 @@ public class Config {
             this.optimisticNeighbor = optimisticNeighbor;
         }
 
-        void setSocket(Socket socket) {
-            this.socket = socket;
+        boolean setSocket(Socket socket) {
+            if(socket != null) {
+                this.socket = socket;
+                return true;
+            } else {
+                return false;
+            }
+
         }
 
         String getAddress() {
