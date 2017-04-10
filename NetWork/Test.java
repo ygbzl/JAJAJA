@@ -10,9 +10,9 @@ public class Test {
 
         peerProcess p = new peerProcess(1001);
         p.run();
-        /*Socket s = new Socket("10.136.54.217",2000);
-        while(true){
-            ;
-        }*/
+        /*byte[] msgLength = new byte[] {0,0,0,1};
+        byte msgType = 1;
+        byte[] tosend = ConstantMethod.mergeBytes(msgLength, new byte[]{msgType});
+        tosend = ConstantMethod.mergeBytes(tosend, new byte[0]);*/
     }
 }

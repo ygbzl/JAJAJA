@@ -22,6 +22,7 @@ public class peerProcess {
     //private int myID;
     //int guestID;
     private static ArrayList<Config.Peer> neighbourPeers;
+    static Logger logger;
     /*final byte[] chokeMsg = {0,0,0,1,0};
     final byte[] unchokeMsg = {0,0,0,1,1};
     final byte[] interestedMsg = {0,0,0,1,2};
@@ -57,7 +58,7 @@ public class peerProcess {
         try {
             for (int i = 0; i < config.getMyIndex(); i++) {
                 sendHandShake(config.getPeers().get(i));
-                System.out.println("sent shakemsg to" + "i");
+                //System.out.println("sent shakemsg to" + "i");
             }
             //when I'm not the last one in the PeerInfo.cfg
             ServerSocket serverSocket = new ServerSocket(config.getMyPort());
@@ -128,7 +129,8 @@ public class peerProcess {
     private void sendHandShake(Config.Peer peer) throws Exception {
         peer.setSocket();
         if (peer.getSocket().isConnected()) {
-            System.out.println("socket:"+peer.getSocket().toString());
+            //System.out.println("socket:"+peer.getSocket().toString());
+            logger.connection(peer.getPID());
         }
         peer.getSocket().setKeepAlive(true);
         handshake.sendMsg(peer.getSocket().getOutputStream());
@@ -140,6 +142,7 @@ public class peerProcess {
     private void waitHandshake(Config.Peer peer, ServerSocket serverSocket) throws Exception {
         while(!peer.setSocket(serverSocket.accept()))
             ;
+        logger.connection(peer.getPID());
         peer.getSocket().setKeepAlive(true);
         handshake.readMsg(peer.getSocket());
         handshake.sendMsg(peer.getSocket().getOutputStream());

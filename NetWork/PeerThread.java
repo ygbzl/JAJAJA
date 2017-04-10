@@ -17,6 +17,7 @@ public class PeerThread implements Runnable {
     //private int peerIndex;
     private Random random;
     private ArrayList<Config.Peer> peerArrayList;
+    private Logger logger;
 
     PeerThread(Config.Peer peer) {
         //receiver = new ActualMsg();
@@ -27,6 +28,7 @@ public class PeerThread implements Runnable {
         //pid = peer.getPID();
         //peerIndex = index;
         random = new Random(System.currentTimeMillis());
+        logger = peerProcess.logger;
     }
 
     @Override
@@ -43,11 +45,13 @@ public class PeerThread implements Runnable {
                     case CHOKE:
                         //received choke message, set flag chokeMe.
                         guestPeer.setChokeMe(true);
+                        logger.choking(guestPeer.getPID());
                         break;
 
                     case UNCHOKE:
                         //received unchoke message, set flag chokeMe, send request message.
                         guestPeer.setChokeMe(false);
+                        logger.unchoking(guestPeer.getPID());
                         if (guestPeer.getInterested()) {
                             ActualMsg request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
                             request.sendActualMsg(guestPeer.getSocket().getOutputStream());
@@ -57,17 +61,20 @@ public class PeerThread implements Runnable {
                     case INTERESTED:
                         //received interest message, set flag interestMe.
                         guestPeer.setInterestMe(true);
+                        logger.interested(guestPeer.getPID());
                         break;
 
                     case NOTINTERESTED:
                         //received not interest message, set flag interestMe.
                         guestPeer.setInterestMe(false);
+                        logger.notInterested(guestPeer.getPID());
                         break;
 
                     case HAVE:
                         //received have message, update peer's bitfield,
                         // check my bitfield, set flag interested and send interest message if needed.
                         // if interested in this peer and not been choked by this peer, send request.
+                        logger.have(guestPeer.getPID(), temp.getIndex());
                         if (peerProcess.config.getMyBitField().isInterested(temp.getIndex())) {
                             //if I am interested in this piece, set flag, send interest message.
                             guestPeer.setInterested(true);
@@ -115,6 +122,11 @@ public class PeerThread implements Runnable {
                         // check if I am still interested in this peer.
                         // if interest and not be chocked, send another request.
                         // tell everyone I have this piece.
+                        peerProcess.config.incTotalDownload();
+                        logger.piece(guestPeer.getPID(), peerProcess.config.getTotalDownload());
+                        if (peerProcess.config.getTotalDownload() == peerProcess.config.getPieceNum()){
+                            logger.completion();
+                        }
                         peerProcess.fileManager.writeMsg(new FilePiece(temp));
                         peerProcess.config.getMyBitField().removeInterest(temp.getIndex());
                         peerProcess.config.getMyBitField().setPiece(temp.getIndex());
