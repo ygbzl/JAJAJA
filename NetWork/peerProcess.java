@@ -62,7 +62,7 @@ public class peerProcess {
             }
             //when I'm not the last one in the PeerInfo.cfg
             ServerSocket serverSocket = new ServerSocket(config.getMyPort());
-            if (config.getMyIndex() != config.getPeers().size() - 1) {
+            if (config.getMyIndex() < config.getPeers().size()) {
                 //ServerSocket serverSocket = new ServerSocket(config.getMyPort());
                 //Waiting for the handshake message from the peers whose pid greater than me
                 for (int i = config.getMyIndex(); i < config.getPeers().size(); i++) {
@@ -134,7 +134,7 @@ public class peerProcess {
 
     private void waitHandshake(Config.Peer peer, ServerSocket serverSocket) throws Exception {
         while(!peer.setSocket(serverSocket.accept()))
-
+            ;
         handshake.readMsg(peer.getSocket().getInputStream());
         handshake.sendMsg(peer.getSocket().getOutputStream());
     }
