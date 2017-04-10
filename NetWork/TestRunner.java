@@ -5,12 +5,12 @@ package NetWork;
  */
 public class TestRunner {
     public static void main(String[] args) throws Exception {
-        peerProcess p1 = new peerProcess(1001);
-        //peerProcess p2 = new peerProcess(1002);
-        //peerProcess p3 = new peerProcess(1003);
+        /*Thread t1 = new Thread(new peerProcess((1001)));
+        Thread t2 = new Thread(new peerProcess((1002)));
+        Thread t3 = new Thread(new peerProcess((1003)));
 
-        p1.run();
-        //p2.run();
-        //p3.run();
+        t1.start();
+        t2.start();
+        t3.start();*/
     }
 }
