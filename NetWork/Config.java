@@ -341,11 +341,10 @@ public class Config {
             return socket;
         }
 
-        void setSocket() throws IOException {
+        Boolean setSocket() throws IOException {
             socket = new Socket(address, port);
-            while(!socket.isConnected())
-                socket.connect(new SocketAddress() {
-            });
+            //while(!socket.isConnected())
+            return socket.isConnected();
         }
 
         Boolean getPreferedNeighbor() {
