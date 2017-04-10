@@ -15,6 +15,7 @@ public class OptNeighbor implements Runnable {
     ArrayList<Config.Peer> tobeChose;
     Config.Peer lastOpt;
     Config.Peer curOpt;
+    Random r;
 
     OptNeighbor() {
         optInterval = peerProcess.config.getOptUnchokingInterval();
@@ -23,6 +24,7 @@ public class OptNeighbor implements Runnable {
         tobeChose = new ArrayList<>();
         lastOpt = null;
         curOpt = null;
+        r = new Random(System.currentTimeMillis());
     }
 
     @Override
@@ -55,8 +57,7 @@ public class OptNeighbor implements Runnable {
                 tobeChose.add(x);
             }
         }
-        Random r = new Random();
-        curOpt = tobeChose.get(r.nextInt(peerProcess.getNeighbourPeers().size()));
+        curOpt = tobeChose.get(r.nextInt(tobeChose.size()));
         curOpt.setChoked(false);
         curOpt.setOptimisticNeighbor(true);
         ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
