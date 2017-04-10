@@ -27,6 +27,7 @@ public class Config {
     private Boolean myFile;
     private BitField myBitField;
     private int myIndex;
+    private int totalDownload = 0;
 
     Config(int pid) throws IOException {
         myPid = pid;
@@ -189,6 +190,14 @@ public class Config {
 
     ArrayList<Peer> getPeers() {
         return peers;
+    }
+
+    public int getTotalDownload() {
+        return totalDownload;
+    }
+
+    public void incTotalDownload() {
+        totalDownload++;
     }
 
     class Peer {
