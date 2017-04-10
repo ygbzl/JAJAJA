@@ -80,6 +80,16 @@ public class PickPreferNeighbour implements Runnable{
 
     public void firstChoose() throws IOException{
         //Random random = new Random(config.getNumberOfPreferedNeighbors());
+        if(peerProcess.getNeighbourPeers().size() < number){
+            for(int i = 0;i < peerProcess.getNeighbourPeers().size();i++){
+                Config.Peer temp = peerProcess.getNeighbourPeers().get(i);
+                temp.setChoked(false);
+                temp.setPreferedNeighbor(true);
+                ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
+                msg.sendActualMsg(temp.getSocket().getOutputStream());
+                preferedPeers.add(peerProcess.getNeighbourPeers().get(i));
+            }
+        }
         for(int i = 0;i < number;i++){
             int index = peerProcess.getNeighbourPeers().indexOf(peerProcess.getNeighbourPeers().get(random.nextInt(peerProcess.getNeighbourPeers().size())));
             Config.Peer temp = peerProcess.getNeighbourPeers().get(index);
