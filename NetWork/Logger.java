@@ -30,7 +30,7 @@ public class Logger {
 
     }
 
-    public void print(String log) throws IOException {
+    public synchronized void print(String log) throws IOException {
         if (flag) {
             System.out.println(log);
 
