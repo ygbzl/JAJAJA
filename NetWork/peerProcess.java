@@ -130,7 +130,7 @@ public class peerProcess {
             System.out.println("socket:"+peer.getSocket().toString());
         }
         handshake.sendMsg(peer.getSocket().getOutputStream());
-        if (handshake.readMsg(peer.getSocket().getInputStream()) != peer.getPID()) {
+        if (handshake.readMsg(peer.getSocket()) != peer.getPID()) {
             throw new Exception("Error occurs on hand shaking");
         }
     }
@@ -138,7 +138,7 @@ public class peerProcess {
     private void waitHandshake(Config.Peer peer, ServerSocket serverSocket) throws Exception {
         while(!peer.setSocket(serverSocket.accept()))
             ;
-        handshake.readMsg(peer.getSocket().getInputStream());
+        handshake.readMsg(peer.getSocket());
         handshake.sendMsg(peer.getSocket().getOutputStream());
     }
 

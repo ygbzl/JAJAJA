@@ -3,6 +3,7 @@ package NetWork;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
 import java.util.Scanner;
 
 import static java.lang.System.in;
@@ -26,12 +27,13 @@ public class HandShakeMsg {
      * get a handshake message and return as a HandShakeMsg instance
      * which contains the guestID
      *
-     * @param io
+     * @param s
      * @return
      * @throws IOException
      */
-    public int readMsg(InputStream io) throws IOException {
+    public int readMsg(Socket s) throws IOException {
         //Scanner in = new Scanner(io);
+        InputStream in = s.getInputStream();
 
         byte[] header = new byte[18];
         byte[] zeroBit = new byte[10];
@@ -47,13 +49,13 @@ public class HandShakeMsg {
 
         totalBytesReceived = 0;
         while (totalBytesReceived < 10){
-            bytesReceived = io.read(zeroBit, totalBytesReceived, 18 - totalBytesReceived);
+            bytesReceived = in.read(zeroBit, totalBytesReceived, 18 - totalBytesReceived);
             totalBytesReceived += bytesReceived;
         }
 
         totalBytesReceived = 0;
         while (totalBytesReceived < 4) {
-            bytesReceived = io.read(peerID, totalBytesReceived, 4 - totalBytesReceived);
+            bytesReceived = in.read(peerID, totalBytesReceived, 4 - totalBytesReceived);
             totalBytesReceived += bytesReceived;
         }
 
@@ -65,7 +67,7 @@ public class HandShakeMsg {
         if (!header.equals(HEADER) || !zeroBit.equals(ZEROBIT)) {
             throw new IOException("not a handshake message");
         }
-        System.out.println("awerwfeerre");
+
         return ConstantMethod.bytesToInt(peerID);
 
     } //read handshake
