@@ -3,6 +3,7 @@ package NetWork;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Scanner;
 
 import static java.lang.System.in;
 
@@ -30,12 +31,25 @@ public class HandShakeMsg {
      * @throws IOException
      */
     public int readMsg(InputStream io) throws IOException {
+        Scanner in = new Scanner(io);
+
         byte[] header = new byte[18];
         byte[] zeroBit = new byte[10];
         byte[] peerID = new byte[4];
-        io.read(header);
+        /*io.read(header);
         io.read(zeroBit);
-        io.read(peerID);
+        io.read(peerID);*/
+        for (int i = 0; i <18 ; i++) {
+            header[i] = in.nextByte();
+        }
+
+        for (int i = 0; i < 10; i++) {
+            zeroBit[i] = in.nextByte();
+        }
+
+        for (int i = 0; i < 4; i++) {
+            peerID[i] = in.nextByte();
+        }
 
         if (!header.equals(HEADER) || !zeroBit.equals(ZEROBIT)) {
             throw new IOException("not a handshake message");
