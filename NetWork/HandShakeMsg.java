@@ -31,33 +31,36 @@ public class HandShakeMsg {
      * @throws IOException
      */
     public int readMsg(InputStream io) throws IOException {
-        Scanner in = new Scanner(io);
+        //Scanner in = new Scanner(io);
 
         byte[] header = new byte[18];
         byte[] zeroBit = new byte[10];
         byte[] peerID = new byte[4];
 
+        int bytesReceived;
+        int totalBytesReceived = 0;
+
+        while (totalBytesReceived < 18) {
+            bytesReceived = in.read(header, totalBytesReceived, 18- totalBytesReceived);
+            totalBytesReceived += bytesReceived;
+        }
+
+        totalBytesReceived = 0;
+        while (totalBytesReceived < 10){
+            bytesReceived = io.read(zeroBit, totalBytesReceived, 18 - totalBytesReceived);
+            totalBytesReceived += bytesReceived;
+        }
+
+        totalBytesReceived = 0;
+        while (totalBytesReceived < 4) {
+            bytesReceived = io.read(peerID, totalBytesReceived, 4 - totalBytesReceived);
+            totalBytesReceived += bytesReceived;
+        }
+
         /*io.read(header);
         io.read(zeroBit);
         io.read(peerID);*/
 
-        for (int i = 0; i <18 ; i++) {
-            while(!in.hasNextByte())
-                ;
-            header[i] = in.nextByte();
-        }
-
-        for (int i = 0; i < 10; i++) {
-            while(!in.hasNextByte())
-                ;
-            zeroBit[i] = in.nextByte();
-        }
-
-        for (int i = 0; i < 4; i++) {
-            while(!in.hasNextByte())
-                ;
-            peerID[i] = in.nextByte();
-        }
 
         if (!header.equals(HEADER) || !zeroBit.equals(ZEROBIT)) {
             throw new IOException("not a handshake message");
