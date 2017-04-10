@@ -104,8 +104,9 @@ public class ActualMsg {
         out.write(toSend);
         out.flush();
         for (int i = 0; i < toSend.length; i++) {
-            System.out.print(toSend[i]);
+            System.out.print(toSend[i] + ",");
         }
+        System.out.println();
         //todo
     }
 
@@ -137,7 +138,7 @@ public class ActualMsg {
         byte[] msgPayLoad = new byte[length];
         totalBytesReceived = 0;
         while (totalBytesReceived < length - 1) {
-            bytesReceived = in.read(msgPayLoad, totalBytesReceived, length - 1 - totalBytesReceived);
+            bytesReceived = in.read(msgPayLoad, totalBytesReceived, length - totalBytesReceived);
             totalBytesReceived += bytesReceived;
         }
 
