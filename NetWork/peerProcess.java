@@ -58,6 +58,7 @@ public class peerProcess {
         try {
             for (int i = 0; i < config.getMyIndex(); i++) {
                 sendHandShake(config.getPeers().get(i));
+                System.out.println("sent shakemsg to" + "i");
             }
             //when I'm not the last one in the PeerInfo.cfg
             ServerSocket serverSocket = new ServerSocket(config.getMyPort());
