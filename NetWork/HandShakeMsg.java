@@ -42,14 +42,20 @@ public class HandShakeMsg {
         io.read(peerID);*/
 
         for (int i = 0; i <18 ; i++) {
+            while(!in.hasNextByte())
+                ;
             header[i] = in.nextByte();
         }
 
         for (int i = 0; i < 10; i++) {
+            while(!in.hasNextByte())
+                ;
             zeroBit[i] = in.nextByte();
         }
 
         for (int i = 0; i < 4; i++) {
+            while(!in.hasNextByte())
+                ;
             peerID[i] = in.nextByte();
         }
 
