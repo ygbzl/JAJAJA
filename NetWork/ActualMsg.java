@@ -103,7 +103,9 @@ public class ActualMsg {
         toSend = ConstantMethod.mergeBytes(toSend, this.msgPaylod);
         out.write(toSend);
         out.flush();
-        System.out.println(toSend);
+        for (int i = 0; i < toSend.length; i++) {
+            System.out.print(toSend[i]);
+        }
         //todo
     }
 
