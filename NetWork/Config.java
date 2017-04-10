@@ -258,6 +258,12 @@ public class Config {
                         e.printStackTrace();
                     }
                 }*/
+            } else {
+                try {
+                    throw new Exception("invalid peer info");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
 
