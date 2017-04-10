@@ -28,6 +28,7 @@ public class Config {
     private BitField myBitField;
     private int myIndex;
     private int totalDownload = 0;
+    private boolean iscompleted=false;
 
     Config(int pid) throws IOException {
         myPid = pid;
@@ -125,6 +126,14 @@ public class Config {
             myIndex++;
             temp = br.readLine();
         }
+    }
+
+    public boolean isIscompleted() {
+        return iscompleted;
+    }
+
+    public void setIscompleted(boolean iscompleted) {
+        this.iscompleted = iscompleted;
     }
 
     int getNumberOfPreferedNeighbors() {

@@ -111,7 +111,7 @@ public class peerProcess {
             specialNeighbourSelector.submit(new PickPreferNeighbour());
             //when finished download, thread exit
 
-            while(!config.getMyFile())
+            while(!config.isIscompleted())
                 ;
             try {
                 peerThreadPool.shutdownNow();
