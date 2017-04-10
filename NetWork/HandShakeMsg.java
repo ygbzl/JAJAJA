@@ -80,6 +80,7 @@ public class HandShakeMsg {
         msg = ConstantMethod.mergeBytes(msg, byteID);
         out.write(msg);
         out.flush();
+        System.out.print("msg sent" + msg);
     } //send handshake
 
 }
