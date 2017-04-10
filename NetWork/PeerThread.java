@@ -89,7 +89,10 @@ public class PeerThread implements Runnable {
                         break;
 
                     case BITFIELD:
-                        //nothing to do here
+                        //only those who doesn't have file will receive this.
+                        //so we simply reply a interest message.
+                        ActualMsg interest_reply = new ActualMsg(ActualMsg.MsgType.INTERESTED);
+                        interest_reply.sendActualMsg(guestPeer.getSocket().getOutputStream());
                         break;
 
                     case REQUEST:

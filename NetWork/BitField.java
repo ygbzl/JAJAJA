@@ -18,7 +18,7 @@ public class BitField {
         data=payload;
     }
 
-    BitField(Boolean haveFile, int pieceNum) {
+    BitField(boolean haveFile, int pieceNum) {
         //this constructor is for peers.
         this.haveFile = haveFile;
         data = new byte[pieceNum];
@@ -28,7 +28,9 @@ public class BitField {
             for (int i = 0; i < data.length; i++) {
                 data[i] = 1;
                 bdata[i] = true;
+                interestList.add(i);
             }
+
         } else {
             for (int i = 0; i < data.length; i++) {
                 data[i] = 0;
