@@ -52,73 +52,66 @@ public class peerProcess {
      * then message type
      * then payload(defined by length)
      */
-    void run() {
+    void run() throws Exception {
         //PeerInfo peer = config.peerInfo.get(guestID);
         //Send handshake message to the peers whose pid less than me
-        try {
-            for (int i = 0; i < config.getMyIndex(); i++) {
-                sendHandShake(config.getPeers().get(i));
-            }
-            //when I'm not the last one in the PeerInfo.cfg
+        for (int i = 0; i < config.getMyIndex(); i++) {
+            sendHandShake(config.getPeers().get(i));
+        }
+        //when I'm not the last one in the PeerInfo.cfg
+        if (config.getMyIndex() != config.getPeers().size()-1) {
             ServerSocket serverSocket = new ServerSocket(config.getMyPort());
-            if (config.getMyIndex() != config.getPeers().size()) {
-                //ServerSocket serverSocket = new ServerSocket(config.getMyPort());
-                //Waiting for the handshake message from the peers whose pid greater than me
-                for (int i = config.getMyIndex(); i < config.getPeers().size(); i++) {
-                    waitHandshake(config.getPeers().get(i), serverSocket);
-                }
-                serverSocket.close();
-            }
-
-            // send bitfield message and interest message
-            // initialize the interest flags
-            for (Config.Peer peer : config.getPeers()
-                    ) {
-                ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
-
-                if (config.getMyFile()) {
-                    //if I have the whole file, send the bitfield message
-                    bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
-                    //wait for an interest message and then set the flag of this peer
-                    //may add it into an interest list
-                    readActualMsg(peer.getSocket().getInputStream());
-                    peer.setInterestMe(true);
-                    peer.setInterested(false);
-                }
-
-                if (peer.getHaveFile()) {
-                    //if this peer have whole file, read and log the bitfield message
-                    //then send interest message
-                    readActualMsg(peer.getSocket().getInputStream());
-                    ActualMsg interestMsg = new ActualMsg(MsgType.INTERESTED);
-                    interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
-                    peer.setInterestMe(false);
-                    peer.setInterested(true);
-                    //when the thread of this peer start, the first thing to do is waiting for the unchoke message.
-                }
-            }
-            //start peerThread here
-            ExecutorService peerThreadPool = Executors.newFixedThreadPool(config.getPeers().size());
-            for (Config.Peer peers : config.getPeers()) {
-                peerThreadPool.submit(new PeerThread(peers));
-            }
-
-            //start optimistic peer unchoke thread and prefered peers unchoke thread here
-            ExecutorService specialNeighbourSelector = Executors.newFixedThreadPool(2);
-            specialNeighbourSelector.submit(new OptNeighbor());
-            specialNeighbourSelector.submit(new PickPreferNeighbour());
-            //when finished download, thread exit
-
-
-            //close all Sockets and files
-            //server socket has closed after hand shake.
-            fileManager.closeManageFile();
-            for (Config.Peer peer : config.getPeers()) {
-                peer.getSocket().close();
+            //Waiting for the handshake message from the peers whose pid greater than me
+            for (int i = config.getMyIndex(); i < config.getPeers().size(); i++) {
+                waitHandshake(config.getPeers().get(i), serverSocket);
             }
             serverSocket.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+
+        // send bitfield message and interest message
+        // initialize the interest flags
+        for (Config.Peer peer : config.getPeers()) {
+            ActualMsg bitfieldMsg = new ActualMsg(config.getMyBitField());
+
+            if (config.getMyFile()) {
+                //if I have the whole file, send the bitfield message
+                bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
+                //wait for an interest message and then set the flag of this peer
+                //may add it into an interest list
+                readActualMsg(peer.getSocket().getInputStream());
+                peer.setInterestMe(true);
+                peer.setInterested(false);
+            }
+
+            if (peer.getHaveFile()) {
+                //if this peer have whole file, read and log the bitfield message
+                //then send interest message
+                readActualMsg(peer.getSocket().getInputStream());
+                ActualMsg interestMsg = new ActualMsg(MsgType.INTERESTED);
+                interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
+                peer.setInterestMe(false);
+                peer.setInterested(true);
+                //when the thread of this peer start, the first thing to do is waiting for the unchoke message.
+            }
+        }
+        //start peerThread here
+        ExecutorService peerThreadPool = Executors.newFixedThreadPool(config.getPeers().size());
+        for (Config.Peer peers : config.getPeers()) {
+            peerThreadPool.submit(new PeerThread(peers));
+        }
+
+        //start optimistic peer unchoke thread and prefered peers uFnchoke thread here
+        ExecutorService specialNeighbourSelector = Executors.newFixedThreadPool(2);
+        specialNeighbourSelector.submit(new OptNeighbor());
+        specialNeighbourSelector.submit(new PickPreferNeighbour());
+        //when finished download, thread exit
+
+
+        //close all Sockets and files
+        //server socket has closed after hand shake.
+        fileManager.closeManageFile();
+        for (Config.Peer peer : config.getPeers()) {
+            peer.getSocket().close();
         }
 
     }
