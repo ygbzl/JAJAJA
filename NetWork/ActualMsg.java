@@ -101,6 +101,7 @@ public class ActualMsg {
         byte[] toSend = ConstantMethod.mergeBytes(this.msgLength, new byte[]{this.msgType});
         toSend = ConstantMethod.mergeBytes(toSend, this.msgPaylod);
         out.write(toSend);
+        out.flush();
         //todo
     }
 
