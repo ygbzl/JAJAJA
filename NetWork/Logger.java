@@ -14,6 +14,7 @@ public class Logger {
     BufferedWriter out;
     String hostPeerID;
     boolean flag=true;//system out
+    FileWriter temp;
     
     Logger(Config config) throws FileNotFoundException {
         this.config=config;
@@ -22,7 +23,10 @@ public class Logger {
         file = new File("log_peer_" + peerID + ".log");
         try {
             file.createNewFile();
-            out = new BufferedWriter(new FileWriter(file));
+             temp=new FileWriter(file);
+
+            out = new BufferedWriter(temp);
+
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,5 +127,12 @@ public class Logger {
         String time= LocalTime.now().toString();
         String log = time + ": Peer" + hostPeerID + "has downloaded the complete file.";
         print(log);
+    }
+
+    public void loggerOf() throws Exception{
+        out.flush();
+        out.close();
+        temp.close();
+
     }
 }
