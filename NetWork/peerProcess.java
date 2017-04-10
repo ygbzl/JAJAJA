@@ -37,6 +37,7 @@ public class peerProcess {
         fileManager = new ManageFile(config);
         handshake = new HandShakeMsg(pid);
         neighbourPeers = new ArrayList<>();
+        logger = new Logger(config);
     }
 
     public static ArrayList<Config.Peer> getNeighbourPeers() {
