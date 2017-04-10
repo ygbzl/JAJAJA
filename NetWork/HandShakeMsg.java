@@ -49,7 +49,7 @@ public class HandShakeMsg {
 
         totalBytesReceived = 0;
         while (totalBytesReceived < 10){
-            bytesReceived = in.read(zeroBit, totalBytesReceived, 18 - totalBytesReceived);
+            bytesReceived = in.read(zeroBit, totalBytesReceived, 10 - totalBytesReceived);
             totalBytesReceived += bytesReceived;
         }
 
@@ -64,7 +64,7 @@ public class HandShakeMsg {
         io.read(peerID);*/
 
 
-        if (!header.equals(HEADER) || !zeroBit.equals(ZEROBIT)) {
+        if (!ConstantMethod.byteArrayComparer(HEADER, header) || !ConstantMethod.byteArrayComparer(ZEROBIT,zeroBit)) {
             throw new IOException("not a handshake message");
         }
 

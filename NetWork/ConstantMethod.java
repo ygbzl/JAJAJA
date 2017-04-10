@@ -59,4 +59,22 @@ public class ConstantMethod {
 
         return res;
     }
+
+    /**
+     * compare the content of two byte[] instead of compare object
+     *
+     */
+
+    public static boolean byteArrayComparer(byte[] a, byte[] b) {
+        if (a.length == b.length){
+            for (int i = 0; i < a.length; i++) {
+                if (a[i] != b[i]){
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
 }
