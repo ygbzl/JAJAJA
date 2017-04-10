@@ -110,8 +110,9 @@ public class peerProcess {
             specialNeighbourSelector.submit(new OptNeighbor());
             specialNeighbourSelector.submit(new PickPreferNeighbour());
             //when finished download, thread exit
-            while(!peerThreadPool.isTerminated())
-                ;
+            boolean t1 = true;
+            while(t1)
+                t1 = !peerThreadPool.isTerminated();
             specialNeighbourSelector.shutdown();
 
             //close all Sockets and files
