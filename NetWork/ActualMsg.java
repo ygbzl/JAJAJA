@@ -101,7 +101,7 @@ public class ActualMsg {
 
     ActualMsg(MsgType msgType, int index) {
         //for have message and request message
-        this.msgLength = new byte[]{0, 0, 0, 1};
+        this.msgLength = new byte[]{0, 0, 0, 4};
         this.type = msgType;
         this.msgType = type.getMsgType();
         this.msgPaylod = ConstantMethod.intToBytes(index);
