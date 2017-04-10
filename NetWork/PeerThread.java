@@ -38,7 +38,7 @@ public class PeerThread implements Runnable {
         boolean t = true;
         try {
             while (t) {
-                ActualMsg temp = ActualMsg.readActualMsg(guestPeer.getSocket().getInputStream());
+                ActualMsg temp = ActualMsg.readActualMsg(guestPeer.getSocket());
                 switch (temp.getType()) {
                     case CHOKE:
                         //received choke message, set flag chokeMe.

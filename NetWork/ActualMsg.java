@@ -4,6 +4,7 @@ package NetWork;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
 
 /**
  * Created by zhupd on 2/18/2017.
@@ -105,17 +106,44 @@ public class ActualMsg {
         //todo
     }
 
-    public static ActualMsg readActualMsg(InputStream in) throws IOException {
+    public static ActualMsg readActualMsg(Socket s) throws IOException {
 
         //todo
+        InputStream in = s.getInputStream();
         byte[] msgLength = new byte[4];
         byte[] msgType_temp=new byte[1];
-        in.read(msgLength);
-        in.read(msgType_temp);
-        byte msgType = msgType_temp[0];
+
+        int bytesReceived;
+        int totalBytesReceived = 0;
+
+        while (totalBytesReceived < 4) {
+            bytesReceived = in.read(msgLength, totalBytesReceived, 4- totalBytesReceived);
+            totalBytesReceived += bytesReceived;
+        }
+
         int length = ConstantMethod.bytesToInt(msgLength);
+
+        totalBytesReceived = 0;
+        while (totalBytesReceived < 1){
+            bytesReceived = in.read(msgType_temp, totalBytesReceived, 1 - totalBytesReceived);
+            totalBytesReceived += bytesReceived;
+        }
+
+        byte msgType = msgType_temp[0];
+
         byte[] msgPayLoad = new byte[length];
-        in.read(msgPayLoad);
+        totalBytesReceived = 0;
+        while (totalBytesReceived < length) {
+            bytesReceived = in.read(msgPayLoad, totalBytesReceived, length - totalBytesReceived);
+            totalBytesReceived += bytesReceived;
+        }
+
+        //in.read(msgLength);
+        //in.read(msgType_temp);
+
+
+
+        //in.read(msgPayLoad);
         return new ActualMsg(msgLength, msgType, msgPayLoad);
     }
 

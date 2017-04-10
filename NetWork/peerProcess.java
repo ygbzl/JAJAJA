@@ -81,7 +81,7 @@ public class peerProcess {
                     bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
                     //wait for an interest message and then set the flag of this peer
                     //may add it into an interest list
-                    readActualMsg(peer.getSocket().getInputStream());
+                    readActualMsg(peer.getSocket());
                     peer.setInterestMe(true);
                     peer.setInterested(false);
                 }
@@ -89,7 +89,7 @@ public class peerProcess {
                 if (peer.getHaveFile()) {
                     //if this peer have whole file, read and log the bitfield message
                     //then send interest message
-                    readActualMsg(peer.getSocket().getInputStream());
+                    readActualMsg(peer.getSocket());
                     ActualMsg interestMsg = new ActualMsg(MsgType.INTERESTED);
                     interestMsg.sendActualMsg(peer.getSocket().getOutputStream());
                     peer.setInterestMe(false);
@@ -128,6 +128,7 @@ public class peerProcess {
         if (peer.getSocket().isConnected()) {
             System.out.println("socket:"+peer.getSocket().toString());
         }
+        peer.getSocket().setKeepAlive(true);
         handshake.sendMsg(peer.getSocket().getOutputStream());
         if (handshake.readMsg(peer.getSocket()) != peer.getPID()) {
             throw new Exception("Error occurs on hand shaking");
@@ -137,6 +138,7 @@ public class peerProcess {
     private void waitHandshake(Config.Peer peer, ServerSocket serverSocket) throws Exception {
         while(!peer.setSocket(serverSocket.accept()))
             ;
+        peer.getSocket().setKeepAlive(true);
         handshake.readMsg(peer.getSocket());
         handshake.sendMsg(peer.getSocket().getOutputStream());
     }
