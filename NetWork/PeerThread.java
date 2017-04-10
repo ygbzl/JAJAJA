@@ -122,12 +122,13 @@ public class PeerThread implements Runnable {
                         // check if I am still interested in this peer.
                         // if interest and not be chocked, send another request.
                         // tell everyone I have this piece.
+                        FilePiece pieceTemp = new FilePiece(temp);
                         peerProcess.config.incTotalDownload();
-                        logger.piece(guestPeer.getPID(), peerProcess.config.getTotalDownload());
+                        logger.piece(guestPeer.getPID(), peerProcess.config.getTotalDownload(), pieceTemp.getPieceIndex());
                         if (peerProcess.config.getTotalDownload() == peerProcess.config.getPieceNum()){
                             logger.completion();
                         }
-                        peerProcess.fileManager.writeMsg(new FilePiece(temp));
+                        peerProcess.fileManager.writeMsg(pieceTemp);
                         peerProcess.config.getMyBitField().removeInterest(temp.getIndex());
                         peerProcess.config.getMyBitField().setPiece(temp.getIndex());
 
