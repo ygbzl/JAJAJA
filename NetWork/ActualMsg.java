@@ -113,7 +113,7 @@ public class ActualMsg {
         this.type=MsgType.PIECE;
         this.msgType=type.getMsgType();
         this.msgLength = ConstantMethod.intToBytes(piece.getPiecesArray().length + 4);
-        this.msgPaylod = ConstantMethod.mergeBytes(msgLength, piece.getPiecesArray());
+        this.msgPaylod = ConstantMethod.mergeBytes(ConstantMethod.intToBytes(piece.getPieceIndex()), piece.getPiecesArray());
 
     }
 
