@@ -105,6 +105,7 @@ public class PickPreferNeighbour implements Runnable{
             logger.changePrefer(preferedPeers);
             msg.sendActualMsg(temp.getSocket().getOutputStream());
             preferedPeers.add(peerProcess.getNeighbourPeers().get(index));
+
         }
     }
 
