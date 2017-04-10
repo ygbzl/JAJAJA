@@ -20,6 +20,7 @@ public class OptNeighbor implements Runnable {
         optInterval = peerProcess.config.getOptUnchokingInterval();
         allPeer = peerProcess.config.getPeers();
         curNeighbors = peerProcess.getNeighbourPeers();
+        tobeChose = new ArrayList<>();
         lastOpt = null;
         curOpt = null;
     }
@@ -30,6 +31,7 @@ public class OptNeighbor implements Runnable {
         try {
             while (t) {
                 choseOpe();
+                tobeChose.clear();
                 Thread.sleep(optInterval * 1000);
 
                 if (peerProcess.config.getMyFile()) {
