@@ -11,24 +11,30 @@ public class PickPreferNeighbour implements Runnable{
      private ArrayList<Config.Peer> preferedPeers;
      private int number;
      Random random = new Random(System.currentTimeMillis());
+     private Logger logger;
 
 
      public PickPreferNeighbour() throws IOException{
          this.interval = peerProcess.config.getUnchokinInterval();
          this.number = peerProcess.config.getNumberOfPreferedNeighbors();
          this.preferedPeers = peerProcess.getNeighbourPeers();
+         this.logger = new Logger(peerProcess.config);
      }
 
     @Override
     public void run(){
         try {
             firstChoose();
+            logger.changePrefer(preferedPeers);
             boolean t = true;
             while(t){
-                if (peerProcess.config.getMyFile())
-                firstChoose();
-                else
+                if (peerProcess.config.getMyFile()) {
+                    firstChoose();
+                    logger.changePrefer(preferedPeers);
+                }else {
                     choose();
+                    logger.changePrefer(preferedPeers);
+                }
                 Thread.sleep(interval * 1000);
                 if (peerProcess.config.getMyFile()) {
                     t = false;

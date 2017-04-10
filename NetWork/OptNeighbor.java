@@ -1,5 +1,6 @@
 package NetWork;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,9 @@ public class OptNeighbor implements Runnable {
     Config.Peer lastOpt;
     Config.Peer curOpt;
     Random r;
+    Logger logger;
 
-    OptNeighbor() {
+    OptNeighbor() throws FileNotFoundException{
         optInterval = peerProcess.config.getOptUnchokingInterval();
         allPeer = peerProcess.config.getPeers();
         curNeighbors = peerProcess.getNeighbourPeers();
@@ -25,6 +27,7 @@ public class OptNeighbor implements Runnable {
         lastOpt = null;
         curOpt = null;
         r = new Random(System.currentTimeMillis());
+        logger = new Logger(peerProcess.config);
     }
 
     @Override
@@ -33,6 +36,7 @@ public class OptNeighbor implements Runnable {
         try {
             while (t) {
                 choseOpe();
+                logger.changeOpt(curOpt.getPID());
                 tobeChose.clear();
                 Thread.sleep(optInterval * 1000);
 
