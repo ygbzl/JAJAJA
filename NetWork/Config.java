@@ -2,6 +2,7 @@ package NetWork;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -342,7 +343,9 @@ public class Config {
 
         void setSocket() throws IOException {
             socket = new Socket(address, port);
-
+            while(!socket.isConnected())
+                socket.connect(new SocketAddress() {
+            });
         }
 
         Boolean getPreferedNeighbor() {

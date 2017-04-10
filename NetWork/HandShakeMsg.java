@@ -57,6 +57,7 @@ public class HandShakeMsg {
         byte[] msg = ConstantMethod.mergeBytes(HEADER, ZEROBIT);
         msg = ConstantMethod.mergeBytes(msg, byteID);
         out.write(msg);
+        out.flush();
     } //send handshake
 
 }
