@@ -22,7 +22,6 @@ public class peerProcess {
     //private int myID;
     //int guestID;
     private static ArrayList<Config.Peer> neighbourPeers;
-
     /*final byte[] chokeMsg = {0,0,0,1,0};
     final byte[] unchokeMsg = {0,0,0,1,1};
     final byte[] interestedMsg = {0,0,0,1,2};
@@ -61,7 +60,7 @@ public class peerProcess {
                 System.out.println("sent shakemsg to" + "i");
             }
             //when I'm not the last one in the PeerInfo.cfg
-            ServerSocket serverSocket = new ServerSocket(config.getMyPort());
+            ServerSocket serverSocket = new ServerSocket(config.getMyPort())
             if (config.getMyIndex() < config.getPeers().size()) {
                 //ServerSocket serverSocket = new ServerSocket(config.getMyPort());
                 //Waiting for the handshake message from the peers whose pid greater than me

@@ -55,8 +55,7 @@ public class OptNeighbor implements Runnable {
                 tobeChose.add(x);
             }
         }
-
-        Random r=new Random();
+        Random r = new Random();
         curOpt = tobeChose.get(r.nextInt(peerProcess.getNeighbourPeers().size()));
         curOpt.setChoked(false);
         curOpt.setOptimisticNeighbor(true);
