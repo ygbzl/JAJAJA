@@ -48,8 +48,10 @@ public class PeerThread implements Runnable {
                     case UNCHOKE:
                         //received unchoke message, set flag chokeMe, send request message.
                         guestPeer.setChokeMe(false);
-                        ActualMsg request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
-                        request.sendActualMsg(guestPeer.getSocket().getOutputStream());
+                        if (guestPeer.getInterested()) {
+                            ActualMsg request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
+                            request.sendActualMsg(guestPeer.getSocket().getOutputStream());
+                        }
                         break;
 
                     case INTERESTED:
@@ -74,7 +76,7 @@ public class PeerThread implements Runnable {
                             guestPeer.getBitField().setPiece(temp.getIndex());
                             guestPeer.getBitField().setInterest(temp.getIndex());
 
-                            if (!guestPeer.getChokeMe()) {
+                            if (!guestPeer.getChokeMe() && guestPeer.getInterested()) {
                                 ActualMsg have_request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
                                 have_request.sendActualMsg(guestPeer.getSocket().getOutputStream());
                             }

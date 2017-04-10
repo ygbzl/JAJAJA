@@ -57,6 +57,9 @@ public class OptNeighbor implements Runnable {
                 tobeChose.add(x);
             }
         }
+        if (tobeChose.size() == 0){
+            return;
+        }
         curOpt = tobeChose.get(r.nextInt(tobeChose.size()));
         curOpt.setChoked(false);
         curOpt.setOptimisticNeighbor(true);

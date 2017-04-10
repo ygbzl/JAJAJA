@@ -97,7 +97,14 @@ public class BitField {
     }
 
     synchronized int randomSelectIndex(Random r){
-
+        if (interestList.size() == 0){
+            try {
+                throw new Exception("nothing in interest list");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //return -1;
+        }
         return interestList.get(r.nextInt(interestList.size()));
 
     }
