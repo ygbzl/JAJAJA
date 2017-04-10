@@ -133,8 +133,8 @@ public class ActualMsg {
 
         byte[] msgPayLoad = new byte[length];
         totalBytesReceived = 0;
-        while (totalBytesReceived < length) {
-            bytesReceived = in.read(msgPayLoad, totalBytesReceived, length - totalBytesReceived);
+        while (totalBytesReceived < length - 1) {
+            bytesReceived = in.read(msgPayLoad, totalBytesReceived, length - 1 - totalBytesReceived);
             totalBytesReceived += bytesReceived;
         }
 

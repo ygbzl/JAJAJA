@@ -81,7 +81,7 @@ public class peerProcess {
                     bitfieldMsg.sendActualMsg(peer.getSocket().getOutputStream());
                     //wait for an interest message and then set the flag of this peer
                     //may add it into an interest list
-                    readActualMsg(peer.getSocket());
+                    //readActualMsg(peer.getSocket());
                     peer.setInterestMe(true);
                     peer.setInterested(false);
                 }
