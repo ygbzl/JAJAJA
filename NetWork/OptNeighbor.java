@@ -40,11 +40,11 @@ public class OptNeighbor implements Runnable {
                 tobeChose.clear();
                 Thread.sleep(optInterval * 1000);
 
-                if (peerProcess.config.getMyFile()) {
+                if (peerProcess.config.getMyBitField().getHaveFile()) {
                     t = false;
                     for (Config.Peer peer : allPeer
                             ) {
-                        if (!peer.getHaveFile()) {
+                        if (!peer.getBitField().getHaveFile()) {
                             t = true;
                         }
                     }

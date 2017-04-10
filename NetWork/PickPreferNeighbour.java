@@ -34,11 +34,11 @@ public class PickPreferNeighbour implements Runnable{
                     choose();
                 }
                 Thread.sleep(interval * 1000);
-                if (peerProcess.config.getMyFile()) {
+                if (peerProcess.config.getMyBitField().getHaveFile()) {
                     t = false;
                     for (Config.Peer peer : peerProcess.config.getPeers()
                             ) {
-                        if (!peer.getHaveFile()) {
+                        if (!peer.getBitField().getHaveFile()) {
                             t = true;
                         }
                     }
