@@ -27,7 +27,7 @@ public class OptNeighbor implements Runnable {
         lastOpt = null;
         curOpt = null;
         r = new Random(System.currentTimeMillis());
-        logger = new Logger(peerProcess.config);
+        logger = peerProcess.logger;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class OptNeighbor implements Runnable {
         try {
             while (t) {
                 choseOpe();
-                logger.changeOpt(curOpt.getPID());
+                //logger.changeOpt(curOpt.getPID());
                 tobeChose.clear();
                 Thread.sleep(optInterval * 1000);
 
@@ -77,6 +77,7 @@ public class OptNeighbor implements Runnable {
                 lastOpt.setOptimisticNeighbor(false);
                 ActualMsg ckMst = new ActualMsg(ActualMsg.MsgType.CHOKE);
                 ckMst.sendActualMsg(lastOpt.getSocket().getOutputStream());
+                logger.changeOpt(curOpt.getPID());
             }
             lastOpt.setTransRate(lastOpt.getTransNumber() / optInterval);
             lastOpt.setTransNumber(0);
