@@ -19,11 +19,9 @@ public class peerProcess {
     //PeerState peerState=new PeerState();
     static ManageFile fileManager;
     private HandShakeMsg handshake;
-    int port;
     //private int myID;
     //int guestID;
     private static ArrayList<Config.Peer> neighbourPeers;
-    ServerSocket serverSocket;
     /*final byte[] chokeMsg = {0,0,0,1,0};
     final byte[] unchokeMsg = {0,0,0,1,1};
     final byte[] interestedMsg = {0,0,0,1,2};
@@ -38,8 +36,6 @@ public class peerProcess {
         fileManager = new ManageFile(config);
         handshake = new HandShakeMsg(pid);
         neighbourPeers = new ArrayList<>();
-        serverSocket = new ServerSocket(config.getMyPort());
-        port=config.getMyPort();
     }
 
     public static ArrayList<Config.Peer> getNeighbourPeers() {
@@ -58,16 +54,13 @@ public class peerProcess {
     void run() {
         //PeerInfo peer = config.peerInfo.get(guestID);
         //Send handshake message to the peers whose pid less than me
-
         try {
-            ServerSocket serverSocket = new ServerSocket(port);
-            System.out.println(port+"start listening");
             for (int i = 0; i < config.getMyIndex(); i++) {
                 sendHandShake(config.getPeers().get(i));
                 System.out.println("sent shakemsg to" + "i");
             }
             //when I'm not the last one in the PeerInfo.cfg
-
+            ServerSocket serverSocket = new ServerSocket(config.getMyPort())
             if (config.getMyIndex() < config.getPeers().size()) {
                 //ServerSocket serverSocket = new ServerSocket(config.getMyPort());
                 //Waiting for the handshake message from the peers whose pid greater than me
