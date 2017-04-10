@@ -66,17 +66,17 @@ public class ActualMsg {
         //for no payload message
         this.type = msgType;
         this.msgLength = new byte[]{0, 0, 0, 1};
-        this.msgPaylod = null;
+        this.msgPaylod = new byte[0];
         this.msgType=msgType.getMsgType();
 
     }
 
     ActualMsg(MsgType msgType, int index) {
         //for have message and request message
-            this.msgLength = new byte[]{0, 0, 0, 1};
-            this.type = msgType;
-            this.msgType = type.getMsgType();
-            this.msgPaylod = ConstantMethod.intToBytes(index);
+        this.msgLength = new byte[]{0, 0, 0, 1};
+        this.type = msgType;
+        this.msgType = type.getMsgType();
+        this.msgPaylod = ConstantMethod.intToBytes(index);
 
     }
 
