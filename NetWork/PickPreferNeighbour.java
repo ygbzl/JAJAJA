@@ -30,10 +30,8 @@ public class PickPreferNeighbour implements Runnable{
             while(t){
                 if (peerProcess.config.getMyFile()) {
                     firstChoose();
-                    logger.changePrefer(preferedPeers);
                 }else {
                     choose();
-                    logger.changePrefer(preferedPeers);
                 }
                 Thread.sleep(interval * 1000);
                 if (peerProcess.config.getMyFile()) {
@@ -65,6 +63,7 @@ public class PickPreferNeighbour implements Runnable{
                 peer.setChoked(false);
                 peer.setPreferedNeighbor(true);
                 ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
+                logger.changePrefer(preferedPeers);
                 msg.sendActualMsg(peer.getSocket().getOutputStream());
                 peer.setTransRate(speed);
             }
@@ -92,6 +91,7 @@ public class PickPreferNeighbour implements Runnable{
                 temp.setChoked(false);
                 temp.setPreferedNeighbor(true);
                 ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
+                logger.changePrefer(preferedPeers);
                 msg.sendActualMsg(temp.getSocket().getOutputStream());
                 preferedPeers.add(peerProcess.getNeighbourPeers().get(i));
             }
@@ -102,6 +102,7 @@ public class PickPreferNeighbour implements Runnable{
             temp.setChoked(false);
             temp.setPreferedNeighbor(true);
             ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
+            logger.changePrefer(preferedPeers);
             msg.sendActualMsg(temp.getSocket().getOutputStream());
             preferedPeers.add(peerProcess.getNeighbourPeers().get(index));
         }
