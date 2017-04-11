@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="JAJAJA:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/JAJAJA_jar</output-path>
+    <root id="archive" name="JAJAJA.jar">
+      <element id="module-output" name="JAJAJA" />
+    </root>
+  </artifact>
+</component>

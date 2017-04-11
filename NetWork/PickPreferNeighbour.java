@@ -26,9 +26,10 @@ public class PickPreferNeighbour implements Runnable {
         try {
             if(!firstChoose())
                 return;
-            logger.changePrefer(preferedPeers);
+            //logger.changePrefer(preferedPeers);
             //boolean t = true;
             //int times = 0;
+            Thread.sleep(interval * 1000);
             while (true) {
                 //System.out.println("prefered neighbor thread, times: "+times++);
                 if (peerProcess.config.getMyFile()) {
@@ -36,7 +37,7 @@ public class PickPreferNeighbour implements Runnable {
                 } else {
                     choose();
                 }
-                Thread.sleep(interval * 1000);
+
                 if (peerProcess.config.getMyBitField().getHaveFile()) {
                     boolean t = false;
                     for (Config.Peer peer : peerProcess.config.getPeers()) {
@@ -50,6 +51,7 @@ public class PickPreferNeighbour implements Runnable {
                         return;
                     }
                 }
+                Thread.sleep(interval * 1000);
             }
         } catch (IOException | InterruptedException e) {
           //  e.printStackTrace();
@@ -60,6 +62,8 @@ public class PickPreferNeighbour implements Runnable {
 
     public void choose() throws IOException {
         //preferedPeers = sortPeers();
+        boolean ifchange = false;
+
         for (Config.Peer pfPeer : preferedPeers) {
             Config.Peer peer = peerProcess.config.getPeers().get(peerProcess.config.getPeers().indexOf(pfPeer));
             peer.setTransRate(peer.getTransNumber() / interval);
@@ -72,11 +76,13 @@ public class PickPreferNeighbour implements Runnable {
 
             } else if (peer.getOptimisticNeighbor()) {
                 peerProcess.config.getPeers().get(peerProcess.config.getPeers().indexOf(peer)).setPreferedNeighbor(true);
+                ifchange = true;
             } else {
                 peerProcess.config.getPeers().get(peerProcess.config.getPeers().indexOf(peer)).setPreferedNeighbor(true);
                 ActualMsg unchoke = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
                 peerProcess.config.getPeers().get(peerProcess.config.getPeers().indexOf(peer)).setChoked(false);
                 unchoke.sendActualMsg(peer.getSocket().getOutputStream());
+                ifchange = true;
             }
         }
 
@@ -86,25 +92,31 @@ public class PickPreferNeighbour implements Runnable {
                 peerProcess.config.getPeers().get(peerProcess.config.getPeers().indexOf(peer)).setChoked(true);
                 ActualMsg choke = new ActualMsg(ActualMsg.MsgType.CHOKE);
                 choke.sendActualMsg(peer.getSocket().getOutputStream());
+                ifchange = true;
             }
         }
 
         preferedPeers.clear();
         preferedPeers = tempPfs;
+        if (ifchange) {
+            logger.changePrefer(preferedPeers);
+        }
 
     }
 
     public boolean firstChoose() throws IOException {
         //Random random = new Random(config.getNumberOfPreferedNeighbors());
-        if (peerProcess.config.getPeers().size() < number) {
+        if (peerProcess.config.getPeers().size() <= number) {
             for (Config.Peer peer:peerProcess.config.getPeers()) {
                 peer.setChoked(false);
                 peer.setPreferedNeighbor(true);
                 ActualMsg unchoke = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
                 unchoke.sendActualMsg(peer.getSocket().getOutputStream());
                 preferedPeers.add(peer);
-                logger.changePrefer(preferedPeers);
             }
+
+            logger.changePrefer(preferedPeers);
+
             return false;
         } else {
             for (int i = 0; i < number; i++) {
@@ -115,12 +127,12 @@ public class PickPreferNeighbour implements Runnable {
                     peer.setChoked(false);
                     peer.setPreferedNeighbor(true);
                     ActualMsg unchoke = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
-                    logger.changePrefer(preferedPeers);
                     unchoke.sendActualMsg(peer.getSocket().getOutputStream());
                 } else {
                     i--;
                 }
             }
+            logger.changePrefer(preferedPeers);
             return true;
         }
     }

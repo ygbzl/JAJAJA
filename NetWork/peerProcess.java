@@ -49,7 +49,7 @@ public class peerProcess {
      * then message type
      * then payload(defined by length)
      */
-/*    public static void main(String[] args) throws Exception {
+  /*  public static void main(String[] args) throws Exception {
         peerProcess p = new peerProcess(Integer.parseInt(args[0]));
         //peerProcess p = new peerProcess();
         p.run();
