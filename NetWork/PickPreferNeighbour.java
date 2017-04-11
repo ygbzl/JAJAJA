@@ -28,9 +28,9 @@ public class PickPreferNeighbour implements Runnable {
                 return;
             logger.changePrefer(preferedPeers);
             //boolean t = true;
-            int times = 0;
+            //int times = 0;
             while (true) {
-                System.out.println("prefered neighbor thread, times: "+times++);
+                //System.out.println("prefered neighbor thread, times: "+times++);
                 if (peerProcess.config.getMyFile()) {
                     firstChoose();
                 } else {

@@ -34,9 +34,9 @@ public class OptNeighbor implements Runnable {
     public void run() {
         //boolean t = true;
         try {
-            int times = 0;
+            //nt times = 0;
             while (true) {
-                System.out.println("optimistic neighbor, times: "+times++);
+                //System.out.println("optimistic neighbor, times: "+times++);
                 choseOpe();
                 //logger.changeOpt(curOpt.getPID());
                 tobeChose.clear();

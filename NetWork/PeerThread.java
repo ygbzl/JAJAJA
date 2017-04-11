@@ -39,9 +39,9 @@ public class PeerThread implements Runnable {
         //I don't have file
         //boolean t = true;
         try {
-            int times = 0;
+            //int times = 0;
             while (true) {
-                System.out.println("peer thread "+guestPeer.getPID()+" times: "+times++);
+                //System.out.println("peer thread "+guestPeer.getPID()+" times: "+times++);
                 ActualMsg temp = ActualMsg.readActualMsg(guestPeer.getSocket());
                 switch (temp.getType()) {
                     case CHOKE:
