@@ -36,16 +36,18 @@ public class ManageFile {
             dir.mkdirs();
         }
 
-        file = new RandomAccessFile(directory + config.getFileName(), "rw");
-        if (!config.getMyFile()){
+
+        if (config.getMyFile()) {
+            File temp = new File(config.getFileName());
+            file = new RandomAccessFile(temp,"rw");
+        } else {
+            file = new RandomAccessFile(directory + config.getFileName(), "rw");
             try {
                 file.setLength(config.getFileSize());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     public synchronized FilePiece readMsg(int index) throws IOException {

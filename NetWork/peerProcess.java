@@ -25,7 +25,7 @@ public class peerProcess {
     static Logger logger;
 
     byte[] haveMsg = {0,0,0,5,4};
-    byte[] requstMsg = {0,0,0,5,6};*/
+    byte[] requstMsg = {0,0,0,5,6};
 
     peerProcess(int pid) throws IOException {
         //myID = pid;
