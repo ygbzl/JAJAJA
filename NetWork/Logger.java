@@ -20,7 +20,7 @@ public class Logger {
         this.config=config;
         peerID=config.getMyPid();
         hostPeerID= config.getMyPid()+"";
-        file = new File("log_peer_" + peerID + ".log");
+        file = new File("peer_" + config.getMyPid() + "/" + "log_peer_" + peerID + ".log");
         try {
             file.createNewFile();
              temp=new FileWriter(file);
