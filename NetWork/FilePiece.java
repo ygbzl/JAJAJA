@@ -6,8 +6,7 @@ package NetWork;
 public class FilePiece {
     /*
    Make file into pieces and store them into piecesArray.
-   You can get pieceIndex and piecesArray by these methords below;
- */
+   You can get pieceIndex and piecesArray by these methords below;*/
     private final int pieceIndex;
     private final byte[] piecesArray;
 

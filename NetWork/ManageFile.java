@@ -26,7 +26,7 @@ public class ManageFile {
      */
 
     public ManageFile(Config config) throws FileNotFoundException{
-        this.config = config;
+        ManageFile.config = config;
 
         String directory = "peer_" + config.getMyPid() + "/";
 

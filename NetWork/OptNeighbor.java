@@ -10,7 +10,7 @@ import java.util.Random;
  * Created by zhupd on 4/7/2017.
  */
 public class OptNeighbor implements Runnable {
-    final int optInterval;
+    private final int optInterval;
     ArrayList<Config.Peer> allPeer;
     //ArrayList<Config.Peer> curNeighbors;
     ArrayList<Config.Peer> tobeChose;

@@ -8,13 +8,13 @@ import java.util.ArrayList;
  * Created by zhupd on 4/10/2017.
  */
 public class Logger {
-    Config config;
-    File file;
-    int peerID;
-    BufferedWriter out;
-    String hostPeerID;
-    boolean flag=false;//system out
-    FileWriter temp;
+    private Config config;
+    private File file;
+    private int peerID;
+    private BufferedWriter out;
+    private String hostPeerID;
+    private boolean flag=false;//system out
+    private FileWriter temp;
     
     Logger(Config config) throws FileNotFoundException {
         this.config=config;

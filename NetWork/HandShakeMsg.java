@@ -12,9 +12,9 @@ import static java.lang.System.in;
  * Created by zhupd on 2/18/2017.
  */
 public class HandShakeMsg {
-    final static byte[] HEADER="P2PFILESHARINGPROJ".getBytes();
-    final static byte[] ZEROBIT={0,0,0,0,0,0,0,0,0,0};
-    int peerID;
+    private final static byte[] HEADER="P2PFILESHARINGPROJ".getBytes();
+    private final static byte[] ZEROBIT={0,0,0,0,0,0,0,0,0,0};
+    private int peerID;
 
 
     HandShakeMsg(int ID) {

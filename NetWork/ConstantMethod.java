@@ -7,7 +7,7 @@ import java.io.InputStream;
  * static method which can be called from other class
  * Created by zhupd on 2/20/2017.
  */
-public class ConstantMethod {
+class ConstantMethod {
 
 
 
@@ -16,6 +16,7 @@ public class ConstantMethod {
      * @param src
      * @return
      */
+
     public static int bytesToInt(byte[] src) {
         int value;
         value = (int) ( ((src[0] & 0xFF)<<24)

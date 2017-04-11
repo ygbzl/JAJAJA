@@ -8,10 +8,10 @@ import java.util.Random;
  * Created by zhupd on 2/19/2017.
  */
 public class BitField {
-    byte[] data;
-    Boolean[] bdata;
+    private byte[] data;
+    private Boolean[] bdata;
     private ArrayList<Integer> interestList; //which pieces i am interested in
-    Boolean haveFile;
+    private Boolean haveFile;
 
     BitField(byte[] payload) {
         //this constructor will never be called

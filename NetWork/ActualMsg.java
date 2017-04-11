@@ -46,7 +46,6 @@ public class ActualMsg {
     }
 
     ActualMsg(){
-
     }
 
     ActualMsg(byte[] msgLength, byte msgType, byte[] msgPaylod) {

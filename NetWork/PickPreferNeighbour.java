@@ -10,7 +10,7 @@ public class PickPreferNeighbour implements Runnable {
     private int interval;
     private ArrayList<Config.Peer> preferedPeers;
     private int number;
-    Random random = new Random(System.currentTimeMillis());
+    private Random random = new Random(System.currentTimeMillis());
     private Logger logger;
 
 

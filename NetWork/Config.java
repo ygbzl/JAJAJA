@@ -264,18 +264,6 @@ public class Config {
                 }
                 this.haveFile = haveFile == 1;
                 bitField = new BitField(this.haveFile, pieceNum);
-                /*if (haveFile == 1){
-                    this.haveFile = true;
-                } else if (haveFile == 0) {
-                    this.haveFile = false;
-                } else {
-                    try {
-                        throw new Exception();
-                    } catch (Exception e) {
-                        System.out.print("invalid have file info: " + haveFile);
-                        e.printStackTrace();
-                    }
-                }*/
             } else {
                 try {
                     throw new Exception("invalid peer info");

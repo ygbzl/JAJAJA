@@ -23,10 +23,6 @@ public class peerProcess {
     //int guestID;
     //private static ArrayList<Config.Peer> neighbourPeers;
     static Logger logger;
-    /*final byte[] chokeMsg = {0,0,0,1,0};
-    final byte[] unchokeMsg = {0,0,0,1,1};
-    final byte[] interestedMsg = {0,0,0,1,2};
-    final byte[] notInterestedMsg = {0,0,0,1,3};
 
     byte[] haveMsg = {0,0,0,5,4};
     byte[] requstMsg = {0,0,0,5,6};*/
