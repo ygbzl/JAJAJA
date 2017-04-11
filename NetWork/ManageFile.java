@@ -4,6 +4,7 @@ package NetWork;
  * Created by zhupd on 2/20/2017.
  */
 import java.io.*;
+import java.nio.file.Files;
 
 /*
  * manage file
@@ -25,7 +26,7 @@ public class ManageFile {
      * @throws FileNotFoundException
      */
 
-    public ManageFile(Config config) throws FileNotFoundException{
+    public ManageFile(Config config) throws IOException {
         ManageFile.config = config;
 
         String directory = "peer_" + config.getMyPid() + "/";
@@ -39,7 +40,7 @@ public class ManageFile {
 
         if (config.getMyFile()) {
             File temp = new File(config.getFileName());
-            file = new RandomAccessFile(temp,"rw");
+            copyfile(temp, dir);
         } else {
             file = new RandomAccessFile(directory + config.getFileName(), "rw");
             try {
@@ -49,6 +50,12 @@ public class ManageFile {
             }
         }
     }
+
+    private static void copyfile(File source, File dest)
+            throws IOException {
+        Files.copy(source.toPath(), dest.toPath());
+    }
+
 
     public synchronized FilePiece readMsg(int index) throws IOException {
         int length = 0;
