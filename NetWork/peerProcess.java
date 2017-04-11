@@ -21,7 +21,7 @@ public class peerProcess {
     private HandShakeMsg handshake;
     //private int myID;
     //int guestID;
-    private static ArrayList<Config.Peer> neighbourPeers;
+    //private static ArrayList<Config.Peer> neighbourPeers;
     static Logger logger;
     /*final byte[] chokeMsg = {0,0,0,1,0};
     final byte[] unchokeMsg = {0,0,0,1,1};
@@ -36,17 +36,17 @@ public class peerProcess {
         config = new Config(pid);
         fileManager = new ManageFile(config);
         handshake = new HandShakeMsg(pid);
-        neighbourPeers = new ArrayList<>();
+        //neighbourPeers = new ArrayList<>();
         logger = new Logger(config);
     }
 
-    public static ArrayList<Config.Peer> getNeighbourPeers() {
+    /*public static ArrayList<Config.Peer> getNeighbourPeers() {
         return neighbourPeers;
-    }
+    }*/
 
-    public static synchronized void setNeighbourPeers(ArrayList<Config.Peer> neighbour) {
+    /*public static synchronized void setNeighbourPeers(ArrayList<Config.Peer> neighbour) {
         neighbourPeers = neighbour;
-    }
+    }*/
 
     /**
      * inputstream, read by fixed byte, first read message length,
@@ -54,26 +54,25 @@ public class peerProcess {
      * then payload(defined by length)
      */
 
-    public static void main(String[] args) throws Exception {
-        peerProcess p = new peerProcess(Integer.parseInt(args[0]));
-
+    /*public static void main(String[] args) throws Exception {
+        //peerProcess p = new peerProcess(Integer.parseInt(args[0]));
+        peerProcess p = new peerProcess(1001);
         p.run();
-        /*byte[] msgLength = new byte[] {0,0,0,1};
-        byte msgType = 1;
-        byte[] tosend = ConstantMethod.mergeBytes(msgLength, new byte[]{msgType});
-        tosend = ConstantMethod.mergeBytes(tosend, new byte[0]);*/
-    }
+    }*/
 
     void run() {
         //PeerInfo peer = config.peerInfo.get(guestID);
         //Send handshake message to the peers whose pid less than me
+        ExecutorService peerThreadPool = null;
+        ExecutorService specialNeighbourSelector = null;
+        ServerSocket serverSocket = null;
         try {
             for (int i = 0; i < config.getMyIndex(); i++) {
                 sendHandShake(config.getPeers().get(i));
                 //System.out.println("sent shakemsg to" + "i");
             }
             //when I'm not the last one in the PeerInfo.cfg
-            ServerSocket serverSocket = new ServerSocket(config.getMyPort());
+            serverSocket = new ServerSocket(config.getMyPort());
             if (config.getMyIndex() < config.getPeers().size()) {
                 //ServerSocket serverSocket = new ServerSocket(config.getMyPort());
                 //Waiting for the handshake message from the peers whose pid greater than me
@@ -111,26 +110,37 @@ public class peerProcess {
                 }
             }
             //start peerThread here
-            ExecutorService peerThreadPool = Executors.newFixedThreadPool(config.getPeers().size());
+            peerThreadPool = Executors.newFixedThreadPool(config.getPeers().size());
             for (Config.Peer peers : config.getPeers()) {
                 peerThreadPool.submit(new PeerThread(peers));
             }
 
             //start optimistic peer unchoke thread and prefered peers unchoke thread here
-            ExecutorService specialNeighbourSelector = Executors.newFixedThreadPool(2);
+            specialNeighbourSelector = Executors.newFixedThreadPool(2);
             specialNeighbourSelector.submit(new OptNeighbor());
             specialNeighbourSelector.submit(new PickPreferNeighbour());
             //when finished download, thread exit
+
+            peerThreadPool.shutdown();
+            specialNeighbourSelector.shutdown();
+
+            while (!peerThreadPool.isTerminated() && !specialNeighbourSelector.isTerminated()) {
+
+            }
+
+            specialNeighbourSelector.shutdownNow();
+            peerThreadPool.shutdownNow();
+            /*System.out.println("thread shutdown");
 
             while(!config.isIscompleted())
                 ;
             try {
                 peerThreadPool.shutdownNow();
                 specialNeighbourSelector.shutdownNow();
-                System.out.println("thead term");
+                System.out.println("thread term");
             } catch (Exception e) {
                 e.printStackTrace();
-            }
+            }*/
 
             //close all Sockets and files
             //server socket has closed after hand shake.
@@ -140,10 +150,22 @@ public class peerProcess {
             }
             logger.loggerOf();
             serverSocket.close();
-            System.out.println("dong");
+            //System.out.println("duang");
 
         } catch (Exception e) {
             e.printStackTrace();
+            peerThreadPool.shutdownNow();
+            specialNeighbourSelector.shutdownNow();
+            try {
+                fileManager.closeManageFile();
+                for (Config.Peer peer : config.getPeers()) {
+                    peer.getSocket().close();
+                }
+                logger.loggerOf();
+                serverSocket.close();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
         }
 
     }

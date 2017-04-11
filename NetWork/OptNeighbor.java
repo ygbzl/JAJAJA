@@ -12,7 +12,7 @@ import java.util.Random;
 public class OptNeighbor implements Runnable {
     final int optInterval;
     ArrayList<Config.Peer> allPeer;
-    ArrayList<Config.Peer> curNeighbors;
+    //ArrayList<Config.Peer> curNeighbors;
     ArrayList<Config.Peer> tobeChose;
     Config.Peer lastOpt;
     Config.Peer curOpt;
@@ -22,7 +22,7 @@ public class OptNeighbor implements Runnable {
     OptNeighbor() throws FileNotFoundException{
         optInterval = peerProcess.config.getOptUnchokingInterval();
         allPeer = peerProcess.config.getPeers();
-        curNeighbors = peerProcess.getNeighbourPeers();
+        //curNeighbors = peerProcess.getNeighbourPeers();
         tobeChose = new ArrayList<>();
         lastOpt = null;
         curOpt = null;
@@ -32,26 +32,36 @@ public class OptNeighbor implements Runnable {
 
     @Override
     public void run() {
-        boolean t = true;
+        //boolean t = true;
         try {
-            while (t) {
+            int times = 0;
+            while (true) {
+                System.out.println("optimistic neighbor, times: "+times++);
                 choseOpe();
                 //logger.changeOpt(curOpt.getPID());
                 tobeChose.clear();
                 Thread.sleep(optInterval * 1000);
 
                 if (peerProcess.config.getMyBitField().getHaveFile()) {
-                    t = false;
-                    for (Config.Peer peer : allPeer
-                            ) {
+                    boolean t = false;
+                    for (Config.Peer peer : allPeer) {
                         if (!peer.getBitField().getHaveFile()) {
                             t = true;
                         }
                     }
+
+                    if (!t){
+                        peerProcess.config.setIscompleted(true);
+                        return;
+                    }
                 }
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
+            return;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return;
         }
     }
 
@@ -65,10 +75,12 @@ public class OptNeighbor implements Runnable {
             return;
         }
         curOpt = tobeChose.get(r.nextInt(tobeChose.size()));
+
         curOpt.setChoked(false);
         curOpt.setOptimisticNeighbor(true);
         ActualMsg msg = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
         msg.sendActualMsg(curOpt.getSocket().getOutputStream());
+
 
 
         if (lastOpt != null) {

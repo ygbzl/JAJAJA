@@ -59,11 +59,13 @@ public class Logger {
         for (Config.Peer x : list) {
             ids += x.getPID() + ", ";
         }
-        ids = ids.substring(0, ids.length() - 1);
-        String time= LocalTime.now().toString();
-        String log = time + ": Peer " + hostPeerID + " has the preferred neighbors "
-                + ids+ ".";
-        print(log);
+        if (ids.length() > 0) {
+            ids = ids.substring(0, ids.length() - 2);
+            String time = LocalTime.now().toString();
+            String log = time + ": Peer " + hostPeerID + " has the preferred neighbors "
+                    + ids + ".";
+            print(log);
+        }
 
     }
 
@@ -126,7 +128,7 @@ public class Logger {
 
     public void completion() throws IOException {
         String time= LocalTime.now().toString();
-        String log = time + ": Peer " + hostPeerID + "has downloaded the complete file.";
+        String log = time + ": Peer " + hostPeerID + " has downloaded the complete file.";
         print(log);
     }
 

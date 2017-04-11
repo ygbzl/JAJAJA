@@ -1,18 +1,12 @@
 package NetWork;
 
-import java.net.Socket;
-
 /**
- * Created by zhupd on 4/9/2017.
+ * Created by leqi on 2017/4/10.
  */
 public class Test {
-/*    public static void main(String[] args) throws Exception {
-        peerProcess p = new peerProcess(1003);
+    public static void main(String[] args) throws Exception {
+        //peerProcess p = new peerProcess(Integer.parseInt(args[0]));
+        peerProcess p = new peerProcess(1001);
         p.run();
-        *//*byte[] msgLength = new byte[] {0,0,0,1};
-        byte msgType = 1;
-        byte[] tosend = ConstantMethod.mergeBytes(msgLength, new byte[]{msgType});
-        tosend = ConstantMethod.mergeBytes(tosend, new byte[0]);*//*
     }
-}*/
 }

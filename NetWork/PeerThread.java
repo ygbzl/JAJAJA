@@ -37,9 +37,11 @@ public class PeerThread implements Runnable {
         //peerProcess.fileManager;
 
         //I don't have file
-        boolean t = true;
+        //boolean t = true;
         try {
-            while (t) {
+            int times = 0;
+            while (true) {
+                System.out.println("peer thread "+guestPeer.getPID()+" times: "+times++);
                 ActualMsg temp = ActualMsg.readActualMsg(guestPeer.getSocket());
                 switch (temp.getType()) {
                     case CHOKE:
@@ -154,23 +156,36 @@ public class PeerThread implements Runnable {
                         break;
                 }
 
+
                 if (peerProcess.config.getMyBitField().getHaveFile()) {
-                    t = false;
-                    for (Config.Peer peer : peerArrayList
-                            ) {
+                    boolean t = false;
+                    for (Config.Peer peer : peerArrayList) {
                         if (!peer.getBitField().getHaveFile()) {
                             t = true;
                         }
+                    }
 
+                    if (!t){
+                        peerProcess.config.setIscompleted(true);
+                        guestPeer.getSocket().close();
+                        return;
                     }
                 }
+                if (guestPeer.getSocket().isClosed())
+                    break;
 
             }
 
-            peerProcess.config.setIscompleted(true);
+            //peerProcess.config.setIscompleted(true);
             //guestPeer.getSocket().close();
         } catch (IOException e) {
             e.printStackTrace();
+            try {
+                guestPeer.getSocket().close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            return;
         }
 
     }

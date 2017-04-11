@@ -48,7 +48,7 @@ public class ManageFile {
 
     }
 
-    public FilePiece readMsg(int index) throws IOException {
+    public synchronized FilePiece readMsg(int index) throws IOException {
         int length = 0;
         if(index == config.getPieceNum()-1){
             length = config.getRemainPieceSize();

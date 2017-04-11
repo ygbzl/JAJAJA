@@ -293,7 +293,7 @@ public class Config {
             this.transNumber = transNumber;
         }
 
-        void incTransNumber() {
+        synchronized void incTransNumber() {
             this.transNumber++;
         }
 
@@ -317,7 +317,7 @@ public class Config {
             return chokeMe;
         }
 
-        void setChokeMe(Boolean chokeMe) {
+        synchronized void setChokeMe(Boolean chokeMe) {
             this.chokeMe = chokeMe;
         }
 
@@ -325,7 +325,7 @@ public class Config {
             return choked;
         }
 
-        void setChoked(Boolean choked) {
+        synchronized void setChoked(Boolean choked) {
             this.choked = choked;
         }
 
@@ -333,7 +333,7 @@ public class Config {
             return interestMe;
         }
 
-        void setInterestMe(Boolean interestMe) {
+        synchronized void setInterestMe(Boolean interestMe) {
             this.interestMe = interestMe;
         }
 
@@ -341,7 +341,7 @@ public class Config {
             return interested;
         }
 
-        void setInterested(Boolean interested) {
+        synchronized void setInterested(Boolean interested) {
             this.interested = interested;
         }
 
