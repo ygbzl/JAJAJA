@@ -50,11 +50,11 @@ public class peerProcess {
      * then payload(defined by length)
      */
 
-    /*public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         peerProcess p = new peerProcess(Integer.parseInt(args[0]));
         //peerProcess p = new peerProcess();
         p.run();
-    }*/
+    }
 
     void run() {
         //PeerInfo peer = config.peerInfo.get(guestID);
@@ -149,9 +149,13 @@ public class peerProcess {
             //System.out.println("duang");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            peerThreadPool.shutdownNow();
-            specialNeighbourSelector.shutdownNow();
+           // e.printStackTrace();
+            if(!peerThreadPool.isTerminated()) {
+                peerThreadPool.shutdownNow();
+            }
+            if(!specialNeighbourSelector.isTerminated()) {
+                specialNeighbourSelector.shutdownNow();
+            }
             try {
                 fileManager.closeManageFile();
                 for (Config.Peer peer : config.getPeers()) {
@@ -160,7 +164,7 @@ public class peerProcess {
                 logger.loggerOf();
                 serverSocket.close();
             } catch (Exception e1) {
-                e1.printStackTrace();
+               // e1.printStackTrace();
             }
         }
 

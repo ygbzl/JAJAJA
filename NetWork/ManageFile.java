@@ -40,14 +40,15 @@ public class ManageFile {
 
         if (config.getMyFile()) {
             File temp = new File(config.getFileName());
-            copyfile(temp, dir);
-            file = new RandomAccessFile(directory + config.getFileName(), "r");
+            File t2 = new File(directory + config.getFileName());
+            copyfile(temp, t2);
+            file = new RandomAccessFile(t2, "rw");
         } else {
             file = new RandomAccessFile(directory + config.getFileName(), "rw");
             try {
                 file.setLength(config.getFileSize());
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
@@ -71,7 +72,7 @@ public class ManageFile {
         try {
             file.seek(offset);
         } catch (IOException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
 
         for (int i = 0; i < length; i++) {

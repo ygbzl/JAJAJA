@@ -52,7 +52,7 @@ public class PickPreferNeighbour implements Runnable {
                 }
             }
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
             return;
         }
 

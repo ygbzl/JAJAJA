@@ -178,11 +178,12 @@ public class PeerThread implements Runnable {
             //peerProcess.config.setIscompleted(true);
             //guestPeer.getSocket().close();
         } catch (IOException e) {
-            e.printStackTrace();
+          //  e.printStackTrace();
             try {
                 guestPeer.getSocket().close();
             } catch (IOException e1) {
-                e1.printStackTrace();
+             //   e1.printStackTrace();
+                return;
             }
             return;
         }

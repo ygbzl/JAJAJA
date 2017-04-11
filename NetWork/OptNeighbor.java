@@ -57,10 +57,10 @@ public class OptNeighbor implements Runnable {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             return;
         }
     }
