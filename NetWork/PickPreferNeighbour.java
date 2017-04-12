@@ -14,21 +14,26 @@ public class PickPreferNeighbour implements Runnable {
     private Logger logger;
 
 
-    public PickPreferNeighbour() throws IOException {
+    public PickPreferNeighbour() {
         this.interval = peerProcess.config.getUnchokinInterval();
         this.number = peerProcess.config.getNumberOfPreferedNeighbors();
         this.preferedPeers = new ArrayList<>();
-        this.logger = new Logger(peerProcess.config);
+        this.logger = peerProcess.logger;
     }
 
     @Override
     public void run() {
         try {
-            if(!firstChoose())
+            //int times = 0;
+            //System.out.println("prefered neighbor thread, times: "+times++);
+            firstChoose();
+            //peerProcess.ifFirstPreferFinished = true;
+            /*if(!firstChoose()) {
+                System.out.println("prefer neighbor thread exit 0.");
                 return;
+            }*/
             //logger.changePrefer(preferedPeers);
             //boolean t = true;
-            //int times = 0;
             Thread.sleep(interval * 1000);
             while (true) {
                 //System.out.println("prefered neighbor thread, times: "+times++);
@@ -48,13 +53,15 @@ public class PickPreferNeighbour implements Runnable {
 
                     if (!t) {
                         peerProcess.config.setIscompleted(true);
+                        System.out.println("prefer neighbor thread exit 1.");
                         return;
                     }
                 }
                 Thread.sleep(interval * 1000);
             }
         } catch (IOException | InterruptedException e) {
-          //  e.printStackTrace();
+            //e.printStackTrace();
+            //System.out.println("prefer neighbor thread exit 2.");
             return;
         }
 
@@ -104,25 +111,27 @@ public class PickPreferNeighbour implements Runnable {
 
     }
 
-    public boolean firstChoose() throws IOException {
+    public void firstChoose() throws IOException {
         //Random random = new Random(config.getNumberOfPreferedNeighbors());
         if (peerProcess.config.getPeers().size() <= number) {
             for (Config.Peer peer:peerProcess.config.getPeers()) {
-                peer.setChoked(false);
-                peer.setPreferedNeighbor(true);
-                ActualMsg unchoke = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
-                unchoke.sendActualMsg(peer.getSocket().getOutputStream());
-                preferedPeers.add(peer);
+                if (peer.getInterestMe()) {
+                    peer.setChoked(false);
+                    peer.setPreferedNeighbor(true);
+                    ActualMsg unchoke = new ActualMsg(ActualMsg.MsgType.UNCHOKE);
+                    unchoke.sendActualMsg(peer.getSocket().getOutputStream());
+                    preferedPeers.add(peer);
+                }
             }
 
             logger.changePrefer(preferedPeers);
 
-            return false;
+            //return false;
         } else {
             for (int i = 0; i < number; i++) {
                 int index = peerProcess.config.getPeers().indexOf(peerProcess.config.getPeers().get(random.nextInt(peerProcess.config.getPeers().size())));
                 Config.Peer peer = peerProcess.config.getPeers().get(index);
-                if (!preferedPeers.contains(peer)) {
+                if (!preferedPeers.contains(peer) && peer.getInterestMe()) {
                     preferedPeers.add(peer);
                     peer.setChoked(false);
                     peer.setPreferedNeighbor(true);
@@ -133,17 +142,19 @@ public class PickPreferNeighbour implements Runnable {
                 }
             }
             logger.changePrefer(preferedPeers);
-            return true;
+            //return true;
         }
     }
 
     public ArrayList<Config.Peer> sortPeers() {
         PriorityQueue<Config.Peer> pq = new PriorityQueue<>(number + 1, Comparator.comparingInt(Config.Peer::getTransRate));
         for (Config.Peer x : peerProcess.config.getPeers()) {
-            if (pq.size() == number + 1) {
-                pq.poll();
+            if (x.getInterestMe()) {
+                if (pq.size() == number + 1) {
+                    pq.poll();
+                }
+                pq.offer(x);
             }
-            pq.offer(x);
         }
         pq.poll();
         return new ArrayList<>(pq);

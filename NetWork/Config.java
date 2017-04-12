@@ -30,11 +30,19 @@ public class Config {
     private int totalDownload = 0;
     private boolean iscompleted=false;
 
-    Config(int pid) throws IOException {
+    Config(int pid) {
         myPid = pid;
         peers = new ArrayList<>();
-        readCommon();
-        readPeerInfo(myPid);
+        try {
+            readCommon();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            readPeerInfo(myPid);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

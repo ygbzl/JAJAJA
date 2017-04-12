@@ -167,24 +167,31 @@ public class PeerThread implements Runnable {
                     if (!t){
                         peerProcess.config.setIscompleted(true);
                         guestPeer.getSocket().close();
+                        //System.out.println("peer thread "+guestPeer.getPID()+" exit 0, times: "+ --times);
                         return;
                     }
                 }
-                if (guestPeer.getSocket().isClosed())
-                    break;
+                if (guestPeer.getSocket().isClosed()) {
+                    //System.out.println("peer thread " + guestPeer.getPID() + " exit 1, times: " + --times);
+                    return;
+                }
 
             }
 
             //peerProcess.config.setIscompleted(true);
             //guestPeer.getSocket().close();
         } catch (IOException e) {
-          //  e.printStackTrace();
-            try {
-                guestPeer.getSocket().close();
-            } catch (IOException e1) {
-             //   e1.printStackTrace();
-                return;
+            //e.printStackTrace();
+            if (guestPeer.getSocket().isClosed()) {
+                try {
+                    guestPeer.getSocket().close();
+                } catch (IOException e1) {
+                    //e1.printStackTrace();
+                    //System.out.println("peer thread "+guestPeer.getPID()+" exit 3");
+                    return;
+                }
             }
+            //System.out.println("peer thread "+guestPeer.getPID()+" exit 2");
             return;
         }
 

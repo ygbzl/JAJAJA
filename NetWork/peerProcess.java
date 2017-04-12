@@ -23,11 +23,12 @@ public class peerProcess {
     //int guestID;
     //private static ArrayList<Config.Peer> neighbourPeers;
     static Logger logger;
+    //static boolean ifFirstPreferFinished = false;
 
-    byte[] haveMsg = {0,0,0,5,4};
-    byte[] requstMsg = {0,0,0,5,6};
+    /*byte[] haveMsg = {0,0,0,5,4};
+    byte[] requstMsg = {0,0,0,5,6};*/
 
-    peerProcess(int pid) throws IOException {
+    peerProcess(int pid) {
         //myID = pid;
         config = new Config(pid);
         fileManager = new ManageFile(config);
@@ -124,8 +125,17 @@ public class peerProcess {
 
             }
 
+            /*while (!peerThreadPool.isTerminated()) {
+
+            }*/
+
+            /*while (!specialNeighbourSelector.isTerminated()){
+
+            }*/
+
             specialNeighbourSelector.shutdownNow();
             peerThreadPool.shutdownNow();
+            System.out.println("shutdown now!");
             /*System.out.println("thread shutdown");
 
             while(!config.isIscompleted())
@@ -164,7 +174,7 @@ public class peerProcess {
                 logger.loggerOf();
                 serverSocket.close();
             } catch (Exception e1) {
-               // e1.printStackTrace();
+                //e1.printStackTrace();
             }
         }
 

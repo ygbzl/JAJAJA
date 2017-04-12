@@ -34,13 +34,16 @@ public class OptNeighbor implements Runnable {
     public void run() {
         //boolean t = true;
         try {
-            //nt times = 0;
+            /*while (!peerProcess.ifFirstPreferFinished) {
+
+            }*/
+            Thread.sleep(1000);
+            //int times = 0;
             while (true) {
                 //System.out.println("optimistic neighbor, times: "+times++);
                 choseOpe();
                 //logger.changeOpt(curOpt.getPID());
                 tobeChose.clear();
-                Thread.sleep(optInterval * 1000);
 
                 if (peerProcess.config.getMyBitField().getHaveFile()) {
                     boolean t = false;
@@ -52,15 +55,21 @@ public class OptNeighbor implements Runnable {
 
                     if (!t){
                         peerProcess.config.setIscompleted(true);
+                        System.out.println("optimistic neighbor thread exit 0.");
                         return;
                     }
                 }
+
+                Thread.sleep(optInterval * 1000);
+
             }
         } catch (IOException e) {
             //e.printStackTrace();
+            //System.out.println("optimistic neighbor thread exit 1.");
             return;
         } catch (InterruptedException e) {
             //e.printStackTrace();
+            //System.out.println("optimistic neighbor thread exit 2.");
             return;
         }
     }

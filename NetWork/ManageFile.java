@@ -26,7 +26,7 @@ public class ManageFile {
      * @throws FileNotFoundException
      */
 
-    public ManageFile(Config config) throws IOException {
+    public ManageFile(Config config) {
         ManageFile.config = config;
 
         String directory = "peer_" + config.getMyPid() + "/";
@@ -41,14 +41,18 @@ public class ManageFile {
         if (config.getMyFile()) {
             File temp = new File(config.getFileName());
             File t2 = new File(directory + config.getFileName());
-            copyfile(temp, t2);
-            file = new RandomAccessFile(t2, "rw");
-        } else {
-            file = new RandomAccessFile(directory + config.getFileName(), "rw");
             try {
+                copyfile(temp, t2);
+                file = new RandomAccessFile(t2, "rw");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                file = new RandomAccessFile(directory + config.getFileName(), "rw");
                 file.setLength(config.getFileSize());
             } catch (IOException e) {
-                //e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }
@@ -59,7 +63,7 @@ public class ManageFile {
     }
 
 
-    public synchronized FilePiece readMsg(int index) throws IOException {
+    public synchronized FilePiece readMsg(int index) {
         int length = 0;
         if(index == config.getPieceNum()-1){
             length = config.getRemainPieceSize();
@@ -71,12 +75,11 @@ public class ManageFile {
 
         try {
             file.seek(offset);
+            for (int i = 0; i < length; i++) {
+                data[i] = file.readByte();
+            }
         } catch (IOException e) {
-           // e.printStackTrace();
-        }
-
-        for (int i = 0; i < length; i++) {
-            data[i] = file.readByte();
+            //e.printStackTrace();
         }
 
         FilePiece filePiece = new FilePiece(index, data);
@@ -85,11 +88,16 @@ public class ManageFile {
 
 
 
-    public synchronized void writeMsg(FilePiece filePiece) throws IOException {
+    public synchronized void writeMsg(FilePiece filePiece) {
         int offset = filePiece.getPieceIndex()*config.getPieceSize();
         byte[] data = filePiece.getPiecesArray();
-        file.seek(offset);
-        file.write(data);
+
+        try {
+            file.seek(offset);
+            file.write(data);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void closeManageFile () throws IOException {
