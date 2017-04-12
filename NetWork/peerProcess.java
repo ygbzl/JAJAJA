@@ -121,9 +121,9 @@ public class peerProcess {
             peerThreadPool.shutdown();
             specialNeighbourSelector.shutdown();
 
-            while (!peerThreadPool.isTerminated() && !specialNeighbourSelector.isTerminated()) {
+            /*while (!peerThreadPool.isTerminated() && !specialNeighbourSelector.isTerminated()) {
 
-            }
+            }*/
 
             /*while (!peerThreadPool.isTerminated()) {
 
@@ -132,10 +132,29 @@ public class peerProcess {
             /*while (!specialNeighbourSelector.isTerminated()){
 
             }*/
+            boolean stopSign;
+            do {
+                stopSign = true;
+                if (peerProcess.config.getMyBitField().getHaveFile()) {
+                    //System.out.println("I have file now");
+                    for (Config.Peer peer : config.getPeers()) {
+                        ActualMsg stop = new ActualMsg(MsgType.STOP);
+                        stop.sendActualMsg(peer.getSocket().getOutputStream());
+                    }
+                    stopSign = false;
+                    for (Config.Peer peer : config.getPeers()) {
+                        if (!peer.getBitField().getHaveFile()) {
+                            //System.out.println("peer "+peer.getPID()+" doesn't have file now.");
+                            stopSign = true;
+                        }
+                    }
+                }
+                Thread.sleep(2000);
+            }while (stopSign);
 
             specialNeighbourSelector.shutdownNow();
             peerThreadPool.shutdownNow();
-            System.out.println("shutdown now!");
+            //System.out.println("shutdown now!");
             /*System.out.println("thread shutdown");
 
             while(!config.isIscompleted())
@@ -152,6 +171,8 @@ public class peerProcess {
             //server socket has closed after hand shake.
             fileManager.closeManageFile();
             for (Config.Peer peer : config.getPeers()) {
+                ActualMsg stop = new ActualMsg(MsgType.STOP);
+                stop.sendActualMsg(peer.getSocket().getOutputStream());
                 peer.getSocket().close();
             }
             logger.loggerOf();
@@ -159,7 +180,7 @@ public class peerProcess {
             //System.out.println("duang");
 
         } catch (Exception e) {
-           // e.printStackTrace();
+            //e.printStackTrace();
             if(!peerThreadPool.isTerminated()) {
                 peerThreadPool.shutdownNow();
             }
@@ -169,6 +190,8 @@ public class peerProcess {
             try {
                 fileManager.closeManageFile();
                 for (Config.Peer peer : config.getPeers()) {
+                    ActualMsg stop = new ActualMsg(MsgType.STOP);
+                    stop.sendActualMsg(peer.getSocket().getOutputStream());
                     peer.getSocket().close();
                 }
                 logger.loggerOf();

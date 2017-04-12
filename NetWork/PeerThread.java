@@ -127,8 +127,10 @@ public class PeerThread implements Runnable {
                         FilePiece pieceTemp = new FilePiece(temp);
                         peerProcess.config.incTotalDownload();
                         logger.piece(guestPeer.getPID(), peerProcess.config.getTotalDownload(), pieceTemp.getPieceIndex());
-                        if (peerProcess.config.getTotalDownload() == peerProcess.config.getPieceNum()){
+                        if (peerProcess.config.getMyBitField().getHaveFile()){
                             logger.completion();
+                            ActualMsg stop = new ActualMsg(ActualMsg.MsgType.STOP);
+                            stop.sendActualMsg(guestPeer.getSocket().getOutputStream());
                         }
                         peerProcess.fileManager.writeMsg(pieceTemp);
                         peerProcess.config.getMyBitField().removeInterest(temp.getIndex());
@@ -152,11 +154,15 @@ public class PeerThread implements Runnable {
                             ActualMsg reply_request = new ActualMsg(ActualMsg.MsgType.REQUEST, guestPeer.getBitField().randomSelectIndex(random));
                             reply_request.sendActualMsg(guestPeer.getSocket().getOutputStream());
                         }
+                        //notify();
+                        break;
 
+                    case STOP:
+                        guestPeer.getBitField().setHaveFile(true);
                         break;
                 }
 
-                if (peerProcess.config.getMyBitField().getHaveFile()) {
+                /*if (peerProcess.config.getMyBitField().getHaveFile()) {
                     boolean t = false;
                     for (Config.Peer peer : peerArrayList) {
                         if (!peer.getBitField().getHaveFile()) {
@@ -167,10 +173,10 @@ public class PeerThread implements Runnable {
                     if (!t){
                         peerProcess.config.setIscompleted(true);
                         guestPeer.getSocket().close();
-                        //System.out.println("peer thread "+guestPeer.getPID()+" exit 0, times: "+ --times);
+                        System.out.println("peer thread "+guestPeer.getPID()+" exit 0, times: "+ --times);
                         return;
                     }
-                }
+                }*/
                 if (guestPeer.getSocket().isClosed()) {
                     //System.out.println("peer thread " + guestPeer.getPID() + " exit 1, times: " + --times);
                     return;

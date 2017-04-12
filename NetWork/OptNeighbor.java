@@ -45,7 +45,7 @@ public class OptNeighbor implements Runnable {
                 //logger.changeOpt(curOpt.getPID());
                 tobeChose.clear();
 
-                if (peerProcess.config.getMyBitField().getHaveFile()) {
+                /*if (peerProcess.config.getMyBitField().getHaveFile()) {
                     boolean t = false;
                     for (Config.Peer peer : allPeer) {
                         if (!peer.getBitField().getHaveFile()) {
@@ -58,7 +58,7 @@ public class OptNeighbor implements Runnable {
                         System.out.println("optimistic neighbor thread exit 0.");
                         return;
                     }
-                }
+                }*/
 
                 Thread.sleep(optInterval * 1000);
 

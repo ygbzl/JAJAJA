@@ -19,7 +19,8 @@ public class ActualMsg {
         HAVE(4),
         BITFIELD(5),
         REQUEST(6),
-        PIECE(7);
+        PIECE(7),
+        STOP(8);
 
 
         final int val;
@@ -78,7 +79,10 @@ public class ActualMsg {
             case 7:
                 type = MsgType.PIECE;
                 break;
-        };
+            case 8:
+                type = MsgType.STOP;
+                break;
+        }
         //split msg[]
     }
 

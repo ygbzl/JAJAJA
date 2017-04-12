@@ -2,6 +2,8 @@ package NetWork;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -12,6 +14,8 @@ public class BitField {
     private Boolean[] bdata;
     private ArrayList<Integer> interestList; //which pieces i am interested in
     private Boolean haveFile;
+    private Lock lock;
+    private Lock intlock;
 
     BitField(byte[] payload) {
         //this constructor will never be called
@@ -24,6 +28,8 @@ public class BitField {
         data = new byte[pieceNum];
         bdata = new Boolean[pieceNum];
         interestList = new ArrayList<>();
+        lock = new ReentrantLock();
+        intlock = new ReentrantLock();
         if (haveFile) {
             for (int i = 0; i < data.length; i++) {
                 data[i] = 1;
@@ -45,6 +51,8 @@ public class BitField {
         data = new byte[pieceNum];
         bdata = new Boolean[pieceNum];
         interestList = new ArrayList<>();
+        lock = new ReentrantLock();
+        intlock = new ReentrantLock();
         if (haveFile) {
             for (int i = 0; i < data.length; i++) {
                 data[i] = 1;
@@ -87,14 +95,24 @@ public class BitField {
     }*/
 
     synchronized void removeInterest(int index){
-        if (interestList.contains(index)) {
-            interestList.remove(interestList.indexOf(index));
+        intlock.lock();
+        try {
+            if (interestList.contains(index)) {
+                interestList.remove(interestList.indexOf(index));
+            }
+        } finally {
+            intlock.unlock();
         }
     }
 
-    synchronized void setInterest(int intex){
-        if(!isInterested(intex)) {
-            interestList.add(intex);
+    synchronized void setInterest(int index){
+        intlock.lock();
+        try {
+            if(!isInterested(index)) {
+                interestList.add(index);
+            }
+        } finally {
+            intlock.unlock();
         }
     }
 
@@ -112,17 +130,22 @@ public class BitField {
     }
 
     synchronized void setPiece(int index) {
-        if (index < data.length) {
-            data[index] = 1;
-            bdata[index] = true;
-        }
-
-        for (Boolean aBdata : bdata) {
-            if (!aBdata) {
-                return;
+        lock.lock();
+        try {
+            if (index < data.length) {
+                data[index] = 1;
+                bdata[index] = true;
             }
+
+            for (Boolean aBdata : bdata) {
+                if (!aBdata) {
+                    return;
+                }
+            }
+            haveFile = true;
+        } finally {
+            lock.unlock();
         }
-        haveFile = true;
     }
 
     synchronized void removePiece(int index){
@@ -133,7 +156,15 @@ public class BitField {
     }
 
     Boolean getHaveFile() {
-        return haveFile;
+        lock.lock();
+        boolean t;
+        try {
+            t = haveFile;
+        } finally {
+            lock.unlock();
+        }
+
+        return t;
     }
 
     byte[] getData() {
@@ -146,5 +177,9 @@ public class BitField {
 
     int getLength(){
         return data.length;
+    }
+
+    void setHaveFile(Boolean haveFile) {
+        this.haveFile = haveFile;
     }
 }

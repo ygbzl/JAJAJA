@@ -43,7 +43,7 @@ public class PickPreferNeighbour implements Runnable {
                     choose();
                 }
 
-                if (peerProcess.config.getMyBitField().getHaveFile()) {
+                /*if (peerProcess.config.getMyBitField().getHaveFile()) {
                     boolean t = false;
                     for (Config.Peer peer : peerProcess.config.getPeers()) {
                         if (!peer.getBitField().getHaveFile()) {
@@ -56,7 +56,7 @@ public class PickPreferNeighbour implements Runnable {
                         System.out.println("prefer neighbor thread exit 1.");
                         return;
                     }
-                }
+                }*/
                 Thread.sleep(interval * 1000);
             }
         } catch (IOException | InterruptedException e) {
@@ -113,6 +113,7 @@ public class PickPreferNeighbour implements Runnable {
 
     public void firstChoose() throws IOException {
         //Random random = new Random(config.getNumberOfPreferedNeighbors());
+        preferedPeers.clear();
         if (peerProcess.config.getPeers().size() <= number) {
             for (Config.Peer peer:peerProcess.config.getPeers()) {
                 if (peer.getInterestMe()) {
